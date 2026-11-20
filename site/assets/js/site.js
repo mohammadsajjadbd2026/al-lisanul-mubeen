@@ -30,6 +30,10 @@
   Object.keys(C).forEach(function (key) {
     var c = C[key];
     fill('[data-price="' + key + '"]', c.price && ('৳ ' + bn(c.price)), '৳ [দাম]');
+    document.querySelectorAll('[data-old-price="' + key + '"]').forEach(function (el) {
+      if (c.oldPrice && c.oldPrice !== c.price) { el.textContent = '৳ ' + bn(c.oldPrice); el.hidden = false; }
+      else el.hidden = true;
+    });
     document.querySelectorAll('[data-course-url="' + key + '"]').forEach(function (a) {
       if (c.url) a.href = c.url; else a.hidden = true;
     });
