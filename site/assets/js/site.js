@@ -43,6 +43,14 @@
     el.textContent = bn(new Date().getFullYear());
   });
 
+  // ---- আগ্রহী তালিকা (WhatsApp) ----
+  document.querySelectorAll('[data-interest]').forEach(function (a) {
+    var c = C[a.getAttribute('data-interest')] || {};
+    if (!S.whatsapp) { a.hidden = true; return; }
+    var t = 'আসসালামু আলাইকুম। "' + (c.title || '') + '" কোর্স চালু হলে আমাকে জানাবেন।\nআমার নাম: ';
+    a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent(t);
+  });
+
   // ---- ভর্তি ফর্ম ----
   var form = document.getElementById('enroll-form');
   if (!form) return;
@@ -51,6 +59,15 @@
   var pre = params.get('course');
   var courseSel = form.querySelector('#f-course');
   if (pre && courseSel.querySelector('option[value="' + pre + '"]')) courseSel.value = pre;
+  var emailWrap = document.getElementById('f-email-wrap');
+  var emailIn = document.getElementById('f-email');
+  function syncEmail() {
+    var nahw = courseSel.value === 'nahw';
+    emailWrap.hidden = !nahw;
+    emailIn.required = nahw;
+  }
+  courseSel.addEventListener('change', syncEmail);
+  syncEmail();
 
   var out = document.getElementById('enroll-result');
   var msgBox = document.getElementById('enroll-message');
@@ -69,6 +86,7 @@
       'কোর্স: ' + (course.title || v('#f-course')) + '\n' +
       'নাম: ' + v('#f-name') + '\n' +
       'মোবাইল/WhatsApp: ' + v('#f-phone') + '\n' +
+      (v('#f-course') === 'nahw' ? 'নাহু কোর্সের অ্যাকাউন্টের ইমেইল: ' + v('#f-email') + '\n' : '') +
       'পেমেন্ট মাধ্যম: ' + v('#f-method') + '\n' +
       'যে নম্বর/হিসাব থেকে পাঠিয়েছি: ' + v('#f-sender') + '\n' +
       'ট্রানজেকশন আইডি (TrxID): ' + v('#f-trx') + '\n' +

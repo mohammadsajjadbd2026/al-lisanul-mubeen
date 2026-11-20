@@ -20,10 +20,16 @@ window.SITE = {
       title: 'আরবি ভাষার হাতেখড়ি',
       price: '2500',     // এখনকার (ছাড়ের) দাম
       oldPrice: '3000',  // আসল দাম — কেটে দেখাবে; ছাড় না থাকলে খালি রাখুন
-      url: 'https://arabi-bhashar-hatekhori.vercel.app',
+      url: '/hatekhori',
       open: true
     },
-    nahw: { title: 'নাহুর সহজ পাঠ', price: '', url: '', open: false },
+    nahw: {
+      title: 'নাহুর সহজ পাঠ',
+      price: '',      // দাম ঠিক করে লিখুন, যেমন '3000'
+      oldPrice: '',
+      url: '/nahw',
+      open: true
+    },
     sarf: { title: 'সরফের সহজ পাঠ', price: '', url: '', open: false }
   }
 };

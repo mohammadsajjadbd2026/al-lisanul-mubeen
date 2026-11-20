@@ -1,4 +1,13 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "site",
-  "cleanUrls": true
+  "buildCommand": "",
+  "cleanUrls": true,
+  "functions": {
+    "api/nahw/lesson.js": { "includeFiles": "courses/nahw/{lessons/**,config.json}" }
+  },
+  "headers": [
+    { "source": "/hatekhori/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/nahw/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+  ]
 }

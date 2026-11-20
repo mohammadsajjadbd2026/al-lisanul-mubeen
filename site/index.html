@@ -36,6 +36,7 @@
 				<li><a href="/#courses">কোর্স</a></li>
 				<li><a href="/#hatekhori">পাঠ্যসূচি</a></li>
 				<li><a href="/#payment">ভর্তি</a></li>
+				<li><a href="/#login">শিক্ষার্থী প্রবেশ</a></li>
 				<li><a href="/#teacher">শিক্ষক</a></li>
 			</ul>
 			<a class="mb-btn mb-btn--outline" href="/enroll.html">ভর্তি ফর্ম</a>
@@ -80,23 +81,28 @@
 						<span><span class="mb-price" data-price="hatekhori">৳ [দাম]</span> <del class="mb-price-old" data-old-price="hatekhori" hidden></del></span>
 						<div class="mb-course__actions">
 							<a class="mb-btn mb-btn--sm" href="/enroll.html?course=hatekhori">ভর্তি হোন</a>
-							<a class="mb-btn mb-btn--sm mb-btn--ghost" data-course-url="hatekhori" href="https://arabi-bhashar-hatekhori.vercel.app" rel="noopener">কোর্সে প্রবেশ</a>
+							<a class="mb-btn mb-btn--sm mb-btn--ghost" data-course-url="hatekhori" href="/hatekhori">কোর্সে প্রবেশ</a>
 						</div>
 					</div>
 				</div>
 			</article>
 
-			<article class="mb-course mb-course--soon">
-				<div class="mb-course__media" aria-hidden="true">
+			<article class="mb-course">
+				<a class="mb-course__media" href="#nahw" tabindex="-1" aria-hidden="true">
 					<span lang="ar" dir="rtl">النَّحْو</span>
-					<em class="mb-badge mb-badge--soon">শীঘ্রই</em>
-				</div>
+					<em class="mb-badge">ভর্তি চলছে</em>
+				</a>
 				<div class="mb-course__body">
 					<p class="mb-course__level">দ্বিতীয় ধাপ · নতুনদের জন্যও</p>
-					<h3 class="mb-course__title">নাহুর সহজ পাঠ</h3>
+					<h3 class="mb-course__title"><a href="#nahw">নাহুর সহজ পাঠ</a></h3>
 					<p class="mb-course__excerpt">উদাহরণ দেখে, বিশ্লেষণ করে, তারপর নিয়ম — শব্দ ও তার প্রকার থেকে শুরু করে ই‘রাব চেনা ও বাক্যের ই‘রাব করা পর্যন্ত।</p>
+					<p class="mb-course__meta">৬ অধ্যায় · ৩৬ দরস · প্রতি দরসে টেস্ট</p>
 					<div class="mb-course__foot">
-						<p class="mb-soon-note">ভর্তি শুরু হলে জানানো হবে।</p>
+						<span><span class="mb-price" data-price="nahw">৳ [দাম]</span> <del class="mb-price-old" data-old-price="nahw" hidden></del></span>
+						<div class="mb-course__actions">
+							<a class="mb-btn mb-btn--sm" href="/enroll.html?course=nahw">ভর্তি হোন</a>
+							<a class="mb-btn mb-btn--sm mb-btn--ghost" data-course-url="nahw" href="/nahw">কোর্সে প্রবেশ</a>
+						</div>
 					</div>
 				</div>
 			</article>
@@ -111,7 +117,8 @@
 					<h3 class="mb-course__title">সরফের সহজ পাঠ</h3>
 					<p class="mb-course__excerpt">শব্দ কীভাবে গঠিত হয় — মূল অক্ষর, ওজন, আর ফে‘লের রূপ বদল; সহজ ভাষায়, উদাহরণসহ।</p>
 					<div class="mb-course__foot">
-						<p class="mb-soon-note">ভর্তি শুরু হলে জানানো হবে।</p>
+						<p class="mb-soon-note">চালু হলে প্রথমেই জানতে চান?</p>
+						<a class="mb-btn mb-btn--sm mb-btn--ghost" data-interest="sarf" href="#" rel="noopener">আগ্রহী তালিকায় নাম দিন</a>
 					</div>
 				</div>
 			</article>
@@ -139,6 +146,38 @@
 	</div>
 </section>
 
+<section id="nahw" class="mb-container mb-stack mb-section" style="padding-top:0">
+	<h2 class="mb-h2">নাহুর সহজ পাঠ — পাঠ্যসূচি</h2>
+	<ol class="mb-syllabus">
+		<li><strong>কালিমা</strong><span>শব্দ ও তার প্রকার — ইসম, ফে‘ল, হরফ</span></li>
+		<li><strong>মুফরাদ ও মুরাক্কাব</strong><span>একক শব্দ থেকে শব্দগুচ্ছ ও বাক্য</span></li>
+		<li><strong>মু‘রাব ও মাবনী</strong><span>কোন শব্দের শেষ বদলায়, কোনটির বদলায় না</span></li>
+		<li><strong>আমিল ও মা‘মূল</strong><span>কে কাকে প্রভাবিত করে — পরিচয় ও প্রকার</span></li>
+		<li><strong>মারফূ‘আত</strong><span>যে শব্দগুলো রফা‘ অবস্থায় থাকে</span></li>
+		<li><strong>জুমলার ই‘রাব</strong><span>পুরো বাক্যেরও ই‘রাব হয়</span></li>
+	</ol>
+	<p class="mb-hero__text" style="text-align:center;margin:0 auto">প্রতিটি দরস শেষে টেস্ট — ৭০% পেলে পরের দরস খুলে যায়।</p>
+	<div class="mb-hero__actions">
+		<a class="mb-btn" href="/enroll.html?course=nahw">ভর্তি হোন</a>
+	</div>
+</section>
+
+<section id="login" class="mb-container mb-stack mb-section" style="padding-top:0">
+	<h2 class="mb-h2">শিক্ষার্থী প্রবেশ</h2>
+	<div class="mb-split">
+		<div class="mb-panel">
+			<h3>আরবি ভাষার হাতেখড়ি</h3>
+			<p>ভর্তির পর পাঠানো পাসওয়ার্ড দিয়ে প্রবেশ করুন। একবার প্রবেশ করলে ৩০ দিন খোলা থাকবে।</p>
+			<a class="mb-btn mb-btn--sm" href="/hatekhori">হাতেখড়িতে প্রবেশ</a>
+		</div>
+		<div class="mb-panel">
+			<h3>নাহুর সহজ পাঠ</h3>
+			<p>আগে কোর্সের পাতায় নিজের অ্যাকাউন্ট খুলুন (ইমেইল দিয়ে)। ফি যাচাইয়ের পর অ্যাকাউন্টটি চালু করে দেওয়া হবে।</p>
+			<a class="mb-btn mb-btn--sm" href="/nahw">নাহুতে প্রবেশ / অ্যাকাউন্ট খুলুন</a>
+		</div>
+	</div>
+</section>
+
 <section id="features" class="mb-band">
 	<div class="mb-container mb-stack">
 		<h2 class="mb-h2">পাঠ-উপকরণ</h2>
@@ -156,12 +195,12 @@
 <section id="payment" class="mb-payment">
 	<div class="mb-container mb-stack">
 		<h2 class="mb-h2">ভর্তির চার ধাপ</h2>
-		<p class="mb-payment__note">বিকাশ, নগদ বা ব্যাংকে কোর্স ফি পাঠিয়ে ভর্তি ফর্মে ট্রানজেকশন আইডি দিন। যাচাইয়ের পর কোর্সে প্রবেশের পাসওয়ার্ড পাঠানো হবে।</p>
+		<p class="mb-payment__note">বিকাশ, নগদ বা ব্যাংকে কোর্স ফি পাঠিয়ে ভর্তি ফর্মে ট্রানজেকশন আইডি দিন। যাচাইয়ের পর কোর্স চালু করে দেওয়া হবে।</p>
 		<ol class="mb-steps">
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">١</span><strong>কোর্স বাছাই</strong><span>পছন্দের কোর্স ঠিক করুন</span></li>
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٢</span><strong>টাকা পাঠান</strong><span>বিকাশ · নগদ · ব্যাংক</span></li>
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٣</span><strong>ভর্তি ফর্ম</strong><span>নাম, নম্বর ও TrxID দিন</span></li>
-			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٤</span><strong>কোর্স চালু</strong><span>যাচাইয়ের পর পাসওয়ার্ড পাবেন</span></li>
+			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٤</span><strong>কোর্স চালু</strong><span>যাচাইয়ের পর শেখা শুরু</span></li>
 		</ol>
 		<div class="mb-hero__actions">
 			<a class="mb-btn" href="/enroll.html" style="background:#FBF6EC;color:#7A1F2B;border-color:#FBF6EC">ভর্তি ফর্ম খুলুন</a>

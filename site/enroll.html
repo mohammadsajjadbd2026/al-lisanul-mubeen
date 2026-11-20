@@ -42,7 +42,7 @@
 <main id="main">
 	<div class="mb-page-head">
 		<h1 class="mb-h1" style="margin:0">ভর্তি ফর্ম</h1>
-		<p>আগে কোর্স ফি পাঠান, তারপর নিচের ফর্ম পূরণ করে তথ্যগুলো আমাদের কাছে পাঠিয়ে দিন। যাচাইয়ের পর কোর্সে প্রবেশের পাসওয়ার্ড পাঠানো হবে।</p>
+		<p>আগে কোর্স ফি পাঠান, তারপর নিচের ফর্ম পূরণ করে তথ্যগুলো আমাদের কাছে পাঠিয়ে দিন। যাচাইয়ের পর কোর্স চালু করে দেওয়া হবে — হাতেখড়ির জন্য পাসওয়ার্ড পাঠানো হবে, নাহুর জন্য আপনার অ্যাকাউন্ট চালু হবে।</p>
 	</div>
 
 	<div class="mb-container mb-section" style="padding-top:40px">
@@ -50,7 +50,7 @@
 
 			<div class="mb-panel">
 				<h3>১. কোর্স ফি পাঠান</h3>
-				<p>আরবি ভাষার হাতেখড়ি: <b data-price="hatekhori">৳ [দাম]</b> <del class="mb-price-old" data-old-price="hatekhori" hidden></del></p>
+				<p>আরবি ভাষার হাতেখড়ি: <b data-price="hatekhori">৳ [দাম]</b> <del class="mb-price-old" data-old-price="hatekhori" hidden></del><br>নাহুর সহজ পাঠ: <b data-price="nahw">৳ [দাম]</b> <del class="mb-price-old" data-old-price="nahw" hidden></del></p>
 				<ul class="mb-paylist">
 					<li><b>বিকাশ (Send Money)</b><span data-pay="bkash">[শীঘ্রই যোগ হবে]</span></li>
 					<li><b>নগদ (Send Money)</b><span data-pay="nagad">[শীঘ্রই যোগ হবে]</span></li>
@@ -66,6 +66,7 @@
 						<label for="f-course">কোর্স</label>
 						<select id="f-course" required>
 							<option value="hatekhori">আরবি ভাষার হাতেখড়ি</option>
+							<option value="nahw">নাহুর সহজ পাঠ</option>
 						</select>
 					</div>
 					<div class="mb-field">
@@ -75,7 +76,12 @@
 					<div class="mb-field">
 						<label for="f-phone">মোবাইল / WhatsApp নম্বর</label>
 						<input id="f-phone" type="tel" autocomplete="tel" inputmode="tel" required>
-						<small>এই নম্বরে পাসওয়ার্ড পাঠানো হবে।</small>
+						<small>এই নম্বরে যোগাযোগ করা হবে।</small>
+					</div>
+					<div class="mb-field" id="f-email-wrap" hidden>
+						<label for="f-email">নাহু কোর্সে অ্যাকাউন্ট খোলার ইমেইল</label>
+						<input id="f-email" type="email" autocomplete="email">
+						<small>আগে <a href="/nahw" target="_blank" rel="noopener">নাহুর পাতায়</a> এই ইমেইলে অ্যাকাউন্ট খুলুন — যাচাইয়ের পর সেটি চালু করা হবে।</small>
 					</div>
 					<div class="mb-field">
 						<label for="f-method">পেমেন্ট মাধ্যম</label>

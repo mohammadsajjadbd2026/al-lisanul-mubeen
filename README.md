@@ -1,33 +1,45 @@
 # আল-লিসানুল মুবীন — আরবি কোর্সের সাইট
 
-বাংলাভাষী শিক্ষার্থীদের জন্য আরবি ভাষা কোর্সের পরিচিতি ও ভর্তির সাইট। পুরোপুরি স্ট্যাটিক, Vercel-এ বিনা খরচে চলে।
+**লাইভ:** https://al-lisanul-mubeen.vercel.app
 
-- **কোর্স:** আরবি ভাষার হাতেখড়ি (চালু — https://arabi-bhashar-hatekhori.vercel.app, পাসওয়ার্ড-সুরক্ষিত), নাহুর সহজ পাঠ ও সরফের সহজ পাঠ (শীঘ্রই)
-- **ভর্তি:** বিকাশ / নগদ / ব্যাংকে টাকা → ভর্তি ফর্ম → তথ্য WhatsApp/Telegram-এ আসে → যাচাই করে কোর্সের পাসওয়ার্ড পাঠানো
+বাংলাভাষী শিক্ষার্থীদের জন্য আরবি ভাষা কোর্সের সাইট — পরিচিতি, ভর্তি, আর কোর্সগুলো একই ঠিকানায়।
 
-## যা বদলাতে হবে — শুধু একটি ফাইল
-`site/assets/js/config.js` — বিকাশ, নগদ, ব্যাংকের তথ্য, WhatsApp নম্বর, Telegram ইউজারনেম, কোর্সের দাম। খালি ঘরগুলো সাইটে "[শীঘ্রই যোগ হবে]" / "[দাম]" দেখায়।
+| ঠিকানা | কী আছে | সুরক্ষা |
+|---|---|---|
+| `/` | হোমপেজ, কোর্স, পাঠ্যসূচি, শিক্ষার্থী প্রবেশ | খোলা |
+| `/enroll` | ভর্তি ফর্ম (তথ্য WhatsApp-এ আসে) | খোলা |
+| `/hatekhori` | আরবি ভাষার হাতেখড়ি — পুরো কোর্স | একটি পাসওয়ার্ড (৩০ দিন মনে রাখে) |
+| `/nahw` | নাহুর সহজ পাঠ — পুরো কোর্স | শিক্ষার্থী-অ্যাকাউন্ট (Supabase) + অনুমোদন + ৭০% পেলে পরের দরস |
+| — | সরফের সহজ পাঠ | শীঘ্রই (আগ্রহী তালিকা WhatsApp-এ) |
 
-GitHub-এ ফাইলটি খুলে ✏️ দিয়ে এডিট করে **Commit** করলেই Vercel ১-২ মিনিটে নতুন সংস্করণ লাইভ করবে।
+## পেমেন্ট নম্বর, দাম, WhatsApp — শুধু একটি ফাইল
+`site/assets/js/config.js` — GitHub-এ ✏️ দিয়ে বদলে **Commit** করলেই ১-২ মিনিটে লাইভ।
 
-## নতুন কোর্স চালু করা (নাহু / সরফ)
-1. `config.js`-এ কোর্সের `price`, `url` দিন, `open: true` করুন।
-2. `site/index.html`-এ কোর্স কার্ডের "শীঘ্রই" অংশটি হাতেখড়ির কার্ডের মতো করে দিন, আর `site/enroll.html`-এর কোর্স তালিকায় নতুন `<option>` যোগ করুন।
+## Vercel-এর Environment Variables (একবার সেট করতে হবে)
+- `HATEKHORI_PASSWORD` — হাতেখড়ির শিক্ষার্থীদের পাসওয়ার্ড
+- `COOKIE_SECRET` — ৩২+ অক্ষরের এলোমেলো লেখা
+
+না থাকলে `/hatekhori` বন্ধ দেখায়; বাকি সাইট চলে। পাসওয়ার্ড বদলাতে: Settings → Environment Variables → Edit → Save → Deployments → Redeploy।
+
+## নাহু কোর্সের শিক্ষার্থী অনুমোদন
+Supabase → Table Editor → `profiles` → শিক্ষার্থীর সারিতে `approved` = true।
+Supabase → Authentication → URL Configuration-এ `https://al-lisanul-mubeen.vercel.app/nahw/` যোগ থাকতে হবে (ইমেইল নিশ্চিতকরণ ও পাসওয়ার্ড রিসেটের জন্য)।
+
+## কোর্সের লেখা হালনাগাদ
+- হাতেখড়ি: `site/hatekhori/index.html` বদলান
+- নাহু: দারস `courses/nahw/lessons/`-এ, কাঠামো `site/nahw/index.html`-এ; দারসের ক্রম Supabase-এর `lessons` টেবিলে (`courses/nahw/supabase/`)
+- হাতেখড়ির প্রবেশ-পাতা: `courses/hatekhori/login.html` বদলে `node tools/build-login.mjs`
 
 ## ফাইল কাঠামো
 ```
-site/
-├── index.html        হোমপেজ
-├── enroll.html       ভর্তি ফর্ম
-├── favicon.ico, site.webmanifest
-└── assets/
-    ├── css/style.css
-    ├── js/config.js  ← সব পরিবর্তনযোগ্য তথ্য
-    ├── js/site.js
-    └── img/          লোগো (logo.svg), ফেবিকন ও আইকন
-tools/make_logo.py    Aref Ruqaa ফন্ট থেকে লোগো/ফেবিকন তৈরি
-vercel.json
+site/                 প্রকাশ্য সাইট (index, enroll, hatekhori/, nahw/, assets/)
+api/hatekhori/        login.js, logout.js
+api/nahw/lesson.js    অনুমোদিত শিক্ষার্থীকে দারস পাঠায়
+middleware.js         /hatekhori পাহারা দেয়
+lib/hatekhori-auth.js
+courses/              প্রকাশ্য নয় এমন ফাইল (নাহুর দারস, হাতেখড়ির প্রবেশ-পাতা)
+tools/                লোগো ও প্রবেশ-পাতা তৈরির স্ক্রিপ্ট
 ```
 
 ## কমিটের নিয়ম
-কমিটের লেখক: `mohammadsajjadbd2026 <276113430+mohammadsajjadbd2026@users.noreply.github.com>` — অন্য ইমেইলে Vercel Hobby ডিপ্লয় আটকে দেয়।
+লেখক: `mohammadsajjadbd2026 <276113430+mohammadsajjadbd2026@users.noreply.github.com>` — অন্য ইমেইলে Vercel Hobby ডিপ্লয় আটকে দেয়।
