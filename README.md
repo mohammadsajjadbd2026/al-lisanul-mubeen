@@ -8,35 +8,37 @@
 |---|---|---|
 | `/` | হোমপেজ, কোর্স, পাঠ্যসূচি, শিক্ষার্থী প্রবেশ | খোলা |
 | `/enroll` | ভর্তি ফর্ম (তথ্য WhatsApp-এ আসে) | খোলা |
-| `/hatekhori` | আরবি ভাষার হাতেখড়ি — পুরো কোর্স | একটি পাসওয়ার্ড (৩০ দিন মনে রাখে) |
-| `/nahw` | নাহুর সহজ পাঠ — পুরো কোর্স | শিক্ষার্থী-অ্যাকাউন্ট (Supabase) + অনুমোদন + ৭০% পেলে পরের দরস |
+| `/account` | নিবন্ধন/প্রবেশ, ভর্তির আবেদন (TrxID সহ), আমার কোর্স | খোলা |
+| `/admin` | অ্যাডমিন: আবেদন অনুমোদন/বাতিল | শুধু অ্যাডমিন |
+| `/hatekhori` | আরবি ভাষার হাতেখড়ি — পুরো কোর্স | অ্যাডমিন-অনুমোদিত শিক্ষার্থী |
+| `/nahw` | নাহুর সহজ পাঠ — পুরো কোর্স | অ্যাডমিন-অনুমোদিত শিক্ষার্থী + ৭০% পেলে পরের দরস |
 | — | সরফের সহজ পাঠ | শীঘ্রই (আগ্রহী তালিকা WhatsApp-এ) |
 
 ## পেমেন্ট নম্বর, দাম, WhatsApp — শুধু একটি ফাইল
 `site/assets/js/config.js` — GitHub-এ ✏️ দিয়ে বদলে **Commit** করলেই ১-২ মিনিটে লাইভ।
 
-## Vercel-এর Environment Variables (একবার সেট করতে হবে)
-- `HATEKHORI_PASSWORD` — হাতেখড়ির শিক্ষার্থীদের পাসওয়ার্ড
-- `COOKIE_SECRET` — ৩২+ অক্ষরের এলোমেলো লেখা
+## ভর্তি ও অনুমোদন (কোর্সভিত্তিক)
+১. শিক্ষার্থী `/account`-এ নিবন্ধন করে → ফি পাঠিয়ে কোর্স বেছে TrxID সহ আবেদন জমা দেয় (অবস্থা: অপেক্ষমাণ)।
+২. অ্যাডমিন `/admin` খুলে পেমেন্ট মিলিয়ে **অনুমোদন** বা **বাতিল** করে। পরে "এক্সেস বন্ধ"ও করা যায়।
+৩. শুধু ওই কোর্সের অনুমোদন পেলেই সেই কোর্স খোলে (হাতেখড়ি ও নাহু আলাদা)। অনুমোদন সার্ভারে যাচাই হয়: কোর্সের লেখা `/api/course` ও `/api/nahw/lesson` অনুমোদিত না হলে পাঠায়ই না, আর ডেটাবেসে RLS শিক্ষার্থীকে নিজে অনুমোদন করতে দেয় না।
 
-না থাকলে `/hatekhori` বন্ধ দেখায়; বাকি সাইট চলে। পাসওয়ার্ড বদলাতে: Settings → Environment Variables → Edit → Save → Deployments → Redeploy।
+### একবারের সেটআপ (Supabase → SQL Editor)
+1. `courses/nahw/supabase/schema.sql` ও `lessons.sql` (আগে চালানো থাকলে বাদ)।
+2. `courses/supabase/enrollments.sql` চালান (আগের অনুমোদিত নাহু শিক্ষার্থীরা নিজে থেকে নাহুতে অনুমোদিত হয়ে যাবে)।
+3. নিজেকে অ্যাডমিন করুন: `update public.profiles set is_admin = true where email = 'আপনার-ইমেইল';`
+4. Authentication → URL Configuration-এ `https://al-lisanul-mubeen.vercel.app/account` ও `/nahw/` যোগ করুন।
 
-## নাহু কোর্সের শিক্ষার্থী অনুমোদন
-Supabase → Table Editor → `profiles` → শিক্ষার্থীর সারিতে `approved` = true।
-Supabase → Authentication → URL Configuration-এ `https://al-lisanul-mubeen.vercel.app/nahw/` যোগ থাকতে হবে (ইমেইল নিশ্চিতকরণ ও পাসওয়ার্ড রিসেটের জন্য)।
+Vercel-এ আর কোনো Environment Variable লাগে না (পুরোনো `HATEKHORI_PASSWORD`/`COOKIE_SECRET` মুছে ফেলা যায়)।
 
 ## কোর্সের লেখা হালনাগাদ
-- হাতেখড়ি: `site/hatekhori/index.html` বদলান
+- হাতেখড়ি: `courses/hatekhori/content.html` বদলান (প্রকাশ্য নয়, শুধু অনুমোদিতদের কাছে যায়)
 - নাহু: দারস `courses/nahw/lessons/`-এ, কাঠামো `site/nahw/index.html`-এ; দারসের ক্রম Supabase-এর `lessons` টেবিলে (`courses/nahw/supabase/`)
-- হাতেখড়ির প্রবেশ-পাতা: `courses/hatekhori/login.html` বদলে `node tools/build-login.mjs`
 
 ## ফাইল কাঠামো
 ```
 site/                 প্রকাশ্য সাইট (index, enroll, hatekhori/, nahw/, assets/)
-api/hatekhori/        login.js, logout.js
-api/nahw/lesson.js    অনুমোদিত শিক্ষার্থীকে দারস পাঠায়
-middleware.js         /hatekhori পাহারা দেয়
-lib/hatekhori-auth.js
+api/course.js         অনুমোদিত শিক্ষার্থীকে হাতেখড়ি পাঠায়
+api/nahw/lesson.js    অনুমোদিত শিক্ষার্থীকে নাহুর দারস পাঠায়
 courses/              প্রকাশ্য নয় এমন ফাইল (নাহুর দারস, হাতেখড়ির প্রবেশ-পাতা)
 tools/                লোগো ও প্রবেশ-পাতা তৈরির স্ক্রিপ্ট
 ```

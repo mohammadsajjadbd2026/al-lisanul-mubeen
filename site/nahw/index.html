@@ -462,8 +462,11 @@ async function refresh(){
   if(!sb){paint();return}
   const {data}=await sb.auth.getSession(); session=data.session;
   if(session){
-    const p=await sb.from('profiles').select('full_name,email,approved,is_admin').eq('id',session.user.id).maybeSingle();
-    profile=p.data||{approved:false,is_admin:false};
+    const p=await sb.from('profiles').select('full_name,email,is_admin').eq('id',session.user.id).maybeSingle();
+    profile=p.data||{is_admin:false};
+    const en=await sb.from('enrollments').select('status').eq('course','nahw').maybeSingle();
+    profile.enroll=(en.data&&en.data.status)||'none';
+    profile.approved=profile.enroll==='approved';
     const g=await sb.from('progress').select('lesson_id,best_score');
     progress=Object.fromEntries((g.data||[]).map(r=>[r.lesson_id,r.best_score]));
   } else {profile=null;progress={}}
@@ -493,7 +496,9 @@ function show(id){
 function gateHTML(kind,id){
   const t={
     login:['এই দারস পড়তে প্রবেশ করো','কোর্সটি শুধু নিবন্ধিত ও অনুমোদিত শিক্ষার্থীদের জন্য।','<button class="btn pri" data-go="account">প্রবেশ / নিবন্ধন</button>'],
-    pending:['অনুমোদনের অপেক্ষায়','তোমার নিবন্ধন হয়েছে। শিক্ষক অনুমোদন দিলেই দারসগুলো খুলবে।','<button class="btn" data-recheck>আবার দেখো</button>'],
+    pending:(profile&&profile.enroll==='pending')
+      ?['অনুমোদনের অপেক্ষায়','তোমার ভর্তির আবেদন জমা আছে। শিক্ষক পেমেন্ট যাচাই করে অনুমোদন দিলেই দারসগুলো খুলবে।','<button class="btn" data-recheck>আবার দেখো</button>']
+      :['এই কোর্সে ভর্তি প্রয়োজন',(profile&&profile.enroll==='rejected'?'তোমার আবেদনটি বাতিল হয়েছে। সঠিক তথ্য দিয়ে আবার আবেদন করো।':'নাহুর সহজ পাঠ পড়তে কোর্সে ভর্তি হতে হবে। ফি পাঠিয়ে আবেদন জমা দাও; শিক্ষক অনুমোদন দিলে দারস খুলবে।'),'<a class="btn pri" href="/account?course=nahw">ভর্তির আবেদন করো</a>'],
     locked:['এই দারস এখনো তালাবদ্ধ','আগের দারসের অনুশীলনে কমপক্ষে '+bn(PASS)+'% সঠিক হলে এটি খুলবে।',(()=>{const i=ORDER.indexOf(id);const p=ORDER[i-1];return p?'<button class="btn pri" data-go="'+p+'">আগের দারসে যাও</button>':''})()],
     error:['দারসটি আনা গেল না','ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করো।','<button class="btn" data-go="'+id+'">আবার চেষ্টা</button>']
   }[kind];
@@ -692,7 +697,7 @@ function paintAccount(){
   $('#authForms').hidden=!!session;
   $('#acctIn').hidden=!session;
   if(!session) return;
-  const st=profile&&(profile.is_admin?'শিক্ষক (সব দারস খোলা)':profile.approved?'অনুমোদিত শিক্ষার্থী':'অনুমোদনের অপেক্ষায় ⏳');
+  const st=profile&&(profile.is_admin?'শিক্ষক (সব দারস খোলা)':profile.approved?'অনুমোদিত শিক্ষার্থী':profile.enroll==='pending'?'অনুমোদনের অপেক্ষায় ⏳':'ভর্তি হয়নি — <a href="/account?course=nahw">আবেদন করো</a>');
   a.innerHTML='<b>'+((profile&&profile.full_name)||'')+'</b> · '+session.user.email+'<br>অবস্থা: '+st+'<br>সম্পন্ন দারস: '+bn(passedCount())+' / '+bn(ORDER.length);
 }
 if(sb){
@@ -705,7 +710,7 @@ if(sb){
     const {data,error}=await sb.auth.signUp({email:f.email.value.trim(),password:f.password.value,options:{data:{full_name:f.full_name.value.trim()},emailRedirectTo:location.origin+'/nahw/'}});
     if(error){msg(m,tr(error.message),true);return}
     f.reset();
-    msg(m,data.session?'নিবন্ধন হয়েছে। শিক্ষক অনুমোদন দিলেই দারস খুলবে।':'নিবন্ধন হয়েছে। তোমার ইমেইলে একটি নিশ্চিতকরণ লিংক গেছে, সেটিতে চাপ দাও। তারপর শিক্ষক অনুমোদন দিলে দারস খুলবে।');
+    msg(m,data.session?'নিবন্ধন হয়েছে। এবার ভর্তির আবেদন জমা দাও (আমার অ্যাকাউন্ট পাতায়); শিক্ষক অনুমোদন দিলে দারস খুলবে।':'নিবন্ধন হয়েছে। ইমেইলের নিশ্চিতকরণ লিংকে চাপ দাও, তারপর ভর্তির আবেদন জমা দাও; শিক্ষক অনুমোদন দিলে দারস খুলবে।');
     await refresh();};
   $('#forgotBtn').onclick=async()=>{const f=$('#loginForm'),m=$('.amsg',f),em=f.email.value.trim();if(!em){msg(m,'আগে ইমেইল লেখো, তারপর এই বোতাম চাপো।',true);return}
     const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+'/nahw/#account'});msg(m,error?tr(error.message):'পাসওয়ার্ড বদলের লিংক তোমার ইমেইলে পাঠানো হয়েছে।',!!error)};

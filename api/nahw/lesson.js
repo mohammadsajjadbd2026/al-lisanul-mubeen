@@ -27,14 +27,16 @@ export default async function handler(req, res) {
   if (!user.ok) return res.status(401).send('sign in required');
   const { id: uid } = await user.json();
 
-  const [pr, lr, gr] = await Promise.all([
-    get(`profiles?select=approved,is_admin&id=eq.${uid}`),
+  const [pr, lr, gr, er] = await Promise.all([
+    get(`profiles?select=is_admin&id=eq.${uid}`),
     get('lessons?select=id,ord&order=ord'),
     get('progress?select=lesson_id,best_score'),
+    get(`enrollments?select=status&user_id=eq.${uid}&course=eq.nahw`),
   ]);
-  if (!pr.ok || !lr.ok || !gr.ok) return res.status(502).send('database error');
-  const profile = (await pr.json())[0];
-  if (!profile || !(profile.approved || profile.is_admin)) return res.status(403).send('pending approval');
+  if (!pr.ok || !lr.ok || !gr.ok || !er.ok) return res.status(502).send('database error');
+  const profile = (await pr.json())[0] || {};
+  const enrolled = (await er.json())[0];
+  if (!profile.is_admin && !(enrolled && enrolled.status === 'approved')) return res.status(403).send('pending approval');
 
   if (!profile.is_admin) {
     const order = (await lr.json()).map((r) => r.id);

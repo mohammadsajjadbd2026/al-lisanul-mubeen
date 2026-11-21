@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>আমার অ্যাকাউন্ট — আল-লিসানুল মুবীন</title>
+<meta name="theme-color" content="#7A1F2B">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Noto+Serif+Bengali:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<style>
+.acc-wrap{max-width:900px;margin:0 auto;padding:36px 20px 70px;display:grid;gap:22px}
+.acc-card{background:#fff;border:1px solid #ead9b8;border-radius:16px;padding:22px}
+.acc-grid{display:grid;gap:22px;grid-template-columns:1fr 1fr}
+@media(max-width:720px){.acc-grid{grid-template-columns:1fr}}
+.acc-msg{min-height:1.4em;font-size:15px;color:#2f6b3b;margin-top:8px}.acc-msg.bad{color:#a4262c}
+.acc-row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;padding:12px 0;border-bottom:1px solid #f0e4cc}
+.acc-row:last-child{border-bottom:0}
+.pill{padding:3px 12px;border-radius:999px;font-size:14px;background:#f6ecd5}
+.pill.approved{background:#dff1e1;color:#1f5a2c}.pill.pending{background:#fff0c9;color:#7a5a00}.pill.rejected{background:#f8dcdc;color:#8a1f24}
+</style>
+</head>
+<body>
+<header class="mb-header"><div class="mb-container mb-header__inner">
+  <a class="mb-brand" href="/"><img class="mb-brand__img" src="/assets/img/logo.svg" alt="" width="132" height="46"><span class="mb-brand__name">আল-লিসানুল মুবীন</span></a>
+  <nav class="mb-nav" aria-label="প্রধান মেনু"><ul class="mb-menu"><li><a href="/">হোম</a></li><li><a href="/#courses">কোর্স</a></li><li id="adminLink" hidden><a href="/admin">অ্যাডমিন</a></li></ul></nav>
+</div></header>
+
+<main class="acc-wrap">
+  <h1 class="mb-h1" style="margin:0">আমার অ্যাকাউন্ট</h1>
+
+  <div id="authBox" class="acc-grid" hidden>
+    <form id="loginForm" class="acc-card mb-form">
+      <h3>প্রবেশ করুন</h3>
+      <div class="mb-field"><label>ইমেইল</label><input name="email" type="email" required autocomplete="email"></div>
+      <div class="mb-field"><label>পাসওয়ার্ড</label><input name="password" type="password" required autocomplete="current-password"></div>
+      <button class="mb-btn" type="submit">প্রবেশ</button>
+      <button class="mb-btn mb-btn--ghost mb-btn--sm" type="button" id="forgotBtn">পাসওয়ার্ড ভুলে গেছি</button>
+      <div class="acc-msg" role="status"></div>
+    </form>
+    <form id="signupForm" class="acc-card mb-form">
+      <h3>নতুন নিবন্ধন</h3>
+      <div class="mb-field"><label>পূর্ণ নাম</label><input name="full_name" required autocomplete="name"></div>
+      <div class="mb-field"><label>ইমেইল</label><input name="email" type="email" required autocomplete="email"></div>
+      <div class="mb-field"><label>পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)</label><input name="password" type="password" required minlength="8" autocomplete="new-password"></div>
+      <button class="mb-btn" type="submit">নিবন্ধন করুন</button>
+      <div class="acc-msg" role="status"></div>
+    </form>
+  </div>
+
+  <div id="newPwBox" class="acc-card" hidden>
+    <form id="newPwForm" class="mb-form"><h3>নতুন পাসওয়ার্ড দিন</h3>
+      <div class="mb-field"><input name="password" type="password" minlength="8" required autocomplete="new-password"></div>
+      <button class="mb-btn mb-btn--sm" type="submit">সংরক্ষণ</button><div class="acc-msg" role="status"></div></form>
+  </div>
+
+  <div id="inBox" hidden>
+    <div class="acc-card">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <div><b id="who"></b><br><small id="mail"></small></div>
+        <button class="mb-btn mb-btn--ghost mb-btn--sm" id="logoutBtn" type="button">বের হোন</button>
+      </div>
+    </div>
+
+    <div class="acc-card" style="margin-top:22px">
+      <h3>আমার কোর্সসমূহ</h3>
+      <div id="myCourses"></div>
+    </div>
+
+    <div class="acc-grid" style="margin-top:22px">
+      <div class="acc-card">
+        <h3>১. কোর্স ফি পাঠান</h3>
+        <p>আরবি ভাষার হাতেখড়ি: <b data-price="hatekhori">৳ [দাম]</b> <del class="mb-price-old" data-old-price="hatekhori" hidden></del><br>নাহুর সহজ পাঠ: <b data-price="nahw">৳ [দাম]</b></p>
+        <ul class="mb-paylist">
+          <li><b>বিকাশ (Send Money)</b><span data-pay="bkash"></span></li>
+          <li><b>নগদ (Send Money)</b><span data-pay="nagad"></span></li>
+          <li><b>ব্যাংক</b><span data-pay="bank"></span></li>
+        </ul>
+        <p class="mb-muted">টাকা পাঠানোর পর যে ট্রানজেকশন আইডি (TrxID) আসবে সেটি পাশের ফর্মে লিখুন।</p>
+      </div>
+      <form id="enrollForm" class="acc-card mb-form">
+        <h3>২. ভর্তির আবেদন জমা দিন</h3>
+        <div class="mb-field"><label>কোর্স</label>
+          <select name="course" required><option value="hatekhori">আরবি ভাষার হাতেখড়ি</option><option value="nahw">নাহুর সহজ পাঠ</option></select></div>
+        <div class="mb-field"><label>পেমেন্ট মাধ্যম</label><select name="method"><option>বিকাশ</option><option>নগদ</option><option>ব্যাংক</option></select></div>
+        <div class="mb-field"><label>যে নম্বর/হিসাব থেকে পাঠিয়েছেন</label><input name="sender" required></div>
+        <div class="mb-field"><label>ট্রানজেকশন আইডি (TrxID)</label><input name="trx_id" required autocapitalize="characters" spellcheck="false"></div>
+        <div class="mb-field"><label>পাঠানো টাকা</label><input name="amount" inputmode="numeric" required></div>
+        <button class="mb-btn" type="submit">আবেদন জমা দিন</button>
+        <div class="acc-msg" role="status"></div>
+        <small>শিক্ষক পেমেন্ট যাচাই করে অনুমোদন দিলে কোর্সটি আপনার জন্য খুলবে।</small>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/site.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)}, sb=MB.sb;
+  function msg(el,t,bad){el.textContent=t;el.className='acc-msg'+(bad?' bad':'')}
+  var params=new URLSearchParams(location.search), preCourse=params.get('course');
+  if(preCourse&&MB.COURSES[preCourse]) $('#enrollForm [name=course]').value=preCourse;
+  var me=null, enrolls=[];
+
+  async function load(){
+    var s=await MB.session();
+    $('#authBox').hidden=!!s; $('#inBox').hidden=!s;
+    if(!s){me=null;return}
+    var p=await MB.profile(s.user.id); me={user:s.user,profile:p};
+    $('#who').textContent=p.full_name||''; $('#mail').textContent=s.user.email;
+    $('#adminLink').hidden=!p.is_admin;
+    var r=await sb.from('enrollments').select('course,status,created_at').order('created_at');
+    enrolls=r.data||[]; paintCourses();
+    var next=params.get('next');
+    if(next && next.charAt(0)==='/' && next.charAt(1)!=='/' && enrolls.some(function(e){return ('/'+e.course)===next&&e.status==='approved'})) location.replace(next);
+  }
+  function paintCourses(){
+    var box=$('#myCourses'); box.textContent='';
+    if(!enrolls.length){var p=document.createElement('p');p.className='mb-muted';p.textContent='এখনো কোনো কোর্সে আবেদন করা হয়নি।';box.appendChild(p);return}
+    enrolls.forEach(function(e){
+      var row=document.createElement('div');row.className='acc-row';
+      var t=document.createElement('b');t.textContent=MB.COURSES[e.course]||e.course;
+      var right=document.createElement('span');
+      var pill=document.createElement('span');pill.className='pill '+e.status;pill.textContent=MB.STATUS[e.status]||e.status;right.appendChild(pill);
+      if(e.status==='approved'){var a=document.createElement('a');a.className='mb-btn mb-btn--sm';a.style.marginInlineStart='10px';a.href='/'+e.course;a.textContent='কোর্সে প্রবেশ';right.appendChild(a)}
+      row.appendChild(t);row.appendChild(right);box.appendChild(row);
+    });
+  }
+
+  $('#loginForm').onsubmit=async function(e){e.preventDefault();var f=e.target,m=$('.acc-msg',f);msg(m,'প্রবেশ করা হচ্ছে…');
+    var r=await sb.auth.signInWithPassword({email:f.email.value.trim(),password:f.password.value});
+    if(r.error){msg(m,MB.tr(r.error.message),true);return} f.reset();await load()};
+  $('#signupForm').onsubmit=async function(e){e.preventDefault();var f=e.target,m=$('.acc-msg',f);
+    if(f.password.value.length<8){msg(m,'পাসওয়ার্ড কমপক্ষে ৮ অক্ষর।',true);return}
+    msg(m,'নিবন্ধন হচ্ছে…');
+    var r=await sb.auth.signUp({email:f.email.value.trim(),password:f.password.value,options:{data:{full_name:f.full_name.value.trim()},emailRedirectTo:location.origin+'/account'}});
+    if(r.error){msg(m,MB.tr(r.error.message),true);return} f.reset();
+    if(r.data.session){await load()} else msg(m,'নিবন্ধন হয়েছে। ইমেইলে পাঠানো নিশ্চিতকরণ লিংকে চাপ দিন, তারপর প্রবেশ করুন।')};
+  $('#forgotBtn').onclick=async function(){var f=$('#loginForm'),m=$('.acc-msg',f),em=f.email.value.trim();
+    if(!em){msg(m,'আগে ইমেইল লিখুন।',true);return}
+    var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+'/account'});
+    msg(m,r.error?MB.tr(r.error.message):'পাসওয়ার্ড বদলের লিংক ইমেইলে পাঠানো হয়েছে।',!!r.error)};
+  $('#logoutBtn').onclick=async function(){await sb.auth.signOut();await load()};
+  $('#newPwForm').onsubmit=async function(e){e.preventDefault();var f=e.target,m=$('.acc-msg',f);
+    var r=await sb.auth.updateUser({password:f.password.value});msg(m,r.error?MB.tr(r.error.message):'নতুন পাসওয়ার্ড সংরক্ষিত হয়েছে।',!!r.error);if(!r.error){f.reset();$('#newPwBox').hidden=true}};
+  sb.auth.onAuthStateChange(function(ev){if(ev==='PASSWORD_RECOVERY')$('#newPwBox').hidden=false});
+
+  $('#enrollForm').onsubmit=async function(e){e.preventDefault();var f=e.target,m=$('.acc-msg',f);
+    if(!me){return}
+    var course=f.course.value, ex=enrolls.find(function(x){return x.course===course});
+    if(ex&&ex.status==='approved'){msg(m,'এই কোর্সে আপনি আগেই অনুমোদিত।',true);return}
+    if(ex&&ex.status==='pending'&&!confirm('এই কোর্সে আপনার একটি আবেদন আগেই জমা আছে। নতুন তথ্য দিয়ে বদলাবেন?'))return;
+    msg(m,'জমা হচ্ছে…');
+    var row={method:f.method.value,sender:f.sender.value.trim(),trx_id:f.trx_id.value.trim(),amount:f.amount.value.trim(),status:'pending'};
+    var r=ex?await sb.from('enrollments').update(row).eq('user_id',me.user.id).eq('course',course)
+            :await sb.from('enrollments').insert(Object.assign({user_id:me.user.id,course:course},row));
+    if(r.error){msg(m,'জমা দেওয়া যায়নি: '+r.error.message,true);return}
+    f.reset();msg(m,'আবেদন জমা হয়েছে। শিক্ষক যাচাই করে অনুমোদন দিলেই কোর্স খুলবে।');await load()};
+
+  if(!sb){document.getElementById('authBox').hidden=false;msg($('#loginForm .acc-msg'),'সংযোগ ত্রুটি, পাতাটি রিফ্রেশ করুন।',true)} else load();
+})();
+</script>
+</body>
+</html>

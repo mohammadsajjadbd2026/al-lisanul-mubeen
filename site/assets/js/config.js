@@ -5,6 +5,9 @@
 window.SITE = {
   name: 'আল-লিসানুল মুবীন',
 
+  // Supabase (প্রকাশ্য কী — নিরাপদ; সুরক্ষা আছে ডেটাবেসের RLS-এ)
+  supabase: { url: 'https://svnoseimqutashoyqesn.supabase.co', anon: 'sb_publishable_ptlOFq8xwgs2Wg-DzUsHyA_BGpwZRXD' },
+
   // পেমেন্টের তথ্য (খালি থাকলে সাইটে "[শীঘ্রই যোগ হবে]" দেখাবে)
   bkash: '01890435248',        // যেমন: '01XXXXXXXXX' (Personal — Send Money)
   nagad: '01890435248',        // যেমন: '01XXXXXXXXX'
