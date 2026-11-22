@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Noto+Serif+Bengali:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/lms.css">
 </head>
 <body>
 <a class="screen-reader-text skip-link" href="#main">মূল লেখায় যান</a>
@@ -36,10 +37,10 @@
 				<li><a href="/#courses">কোর্স</a></li>
 				<li><a href="/#hatekhori">পাঠ্যসূচি</a></li>
 				<li><a href="/#payment">ভর্তি</a></li>
-				<li><a href="/#login">শিক্ষার্থী প্রবেশ</a></li>
+				<li><a href="/learn">আমার কোর্স</a></li>
 				<li><a href="/#teacher">শিক্ষক</a></li>
 			</ul>
-			<a class="mb-btn mb-btn--outline" href="/account">ভর্তি ফর্ম</a>
+			<span class="lx-auth" data-auth-slot><a class="mb-btn mb-btn--outline" href="/learn">প্রবেশ</a></span>
 		</nav>
 	</div>
 </header>
@@ -80,7 +81,7 @@
 					<div class="mb-course__foot">
 						<span><span class="mb-price" data-price="hatekhori">৳ [দাম]</span> <del class="mb-price-old" data-old-price="hatekhori" hidden></del></span>
 						<div class="mb-course__actions">
-							<a class="mb-btn mb-btn--sm" href="/account?course=hatekhori">ভর্তি হোন</a>
+							<a class="mb-btn mb-btn--sm" href="/course?c=arabi-bhashar-hatekhori">ভর্তি হোন</a>
 							<a class="mb-btn mb-btn--sm mb-btn--ghost" data-course-url="hatekhori" href="/hatekhori">কোর্সে প্রবেশ</a>
 						</div>
 					</div>
@@ -100,7 +101,7 @@
 					<div class="mb-course__foot">
 						<span><span class="mb-price" data-price="nahw">৳ [দাম]</span> <del class="mb-price-old" data-old-price="nahw" hidden></del></span>
 						<div class="mb-course__actions">
-							<a class="mb-btn mb-btn--sm" href="/account?course=nahw">ভর্তি হোন</a>
+							<a class="mb-btn mb-btn--sm" href="/course?c=nahwer-sohoj-path">ভর্তি হোন</a>
 							<a class="mb-btn mb-btn--sm mb-btn--ghost" data-course-url="nahw" href="/nahw">কোর্সে প্রবেশ</a>
 						</div>
 					</div>
@@ -142,7 +143,7 @@
 		<li><strong>হাদিস ও গল্প</strong><span>ছোট হাদিস ও সহজ আরবি গল্প</span></li>
 	</ol>
 	<div class="mb-hero__actions">
-		<a class="mb-btn" href="/account?course=hatekhori">ভর্তি হোন</a>
+		<a class="mb-btn" href="/course?c=arabi-bhashar-hatekhori">ভর্তি হোন</a>
 	</div>
 </section>
 
@@ -158,24 +159,15 @@
 	</ol>
 	<p class="mb-hero__text" style="text-align:center;margin:0 auto">প্রতিটি দরস শেষে টেস্ট — ৭০% পেলে পরের দরস খুলে যায়।</p>
 	<div class="mb-hero__actions">
-		<a class="mb-btn" href="/account?course=nahw">ভর্তি হোন</a>
+		<a class="mb-btn" href="/course?c=nahwer-sohoj-path">ভর্তি হোন</a>
 	</div>
 </section>
 
 <section id="login" class="mb-container mb-stack mb-section" style="padding-top:0">
 	<h2 class="mb-h2">শিক্ষার্থী প্রবেশ</h2>
-	<div class="mb-split">
-		<div class="mb-panel">
-			<h3>আরবি ভাষার হাতেখড়ি</h3>
-			<p>অ্যাকাউন্ট খুলে ভর্তির আবেদন জমা দিন। শিক্ষক অনুমোদন দিলে কোর্স খুলবে।</p>
-			<a class="mb-btn mb-btn--sm" href="/hatekhori">হাতেখড়িতে প্রবেশ</a>
-			<a class="mb-btn mb-btn--sm mb-btn--ghost" href="/account">অ্যাকাউন্ট / আবেদন</a>
-		</div>
-		<div class="mb-panel">
-			<h3>নাহুর সহজ পাঠ</h3>
-			<p>অ্যাকাউন্ট খুলে ভর্তির আবেদন জমা দিন। শিক্ষক অনুমোদন দিলে দারসগুলো খুলবে।</p>
-			<a class="mb-btn mb-btn--sm" href="/nahw">নাহুতে প্রবেশ / অ্যাকাউন্ট খুলুন</a>
-		</div>
+	<div class="lx-narrow lx-center">
+		<p>একটি অ্যাকাউন্টেই সব কোর্স — ভিডিও দরস, নোট, টেস্ট, অগ্রগতি ও সার্টিফিকেট।</p>
+		<a class="mb-btn" href="/learn">প্রবেশ / নতুন অ্যাকাউন্ট</a>
 	</div>
 </section>
 
@@ -196,15 +188,15 @@
 <section id="payment" class="mb-payment">
 	<div class="mb-container mb-stack">
 		<h2 class="mb-h2">ভর্তির চার ধাপ</h2>
-		<p class="mb-payment__note">বিকাশ, নগদ বা ব্যাংকে কোর্স ফি পাঠিয়ে ভর্তি ফর্মে ট্রানজেকশন আইডি দিন। যাচাইয়ের পর কোর্স চালু করে দেওয়া হবে।</p>
+		<p class="mb-payment__note">একটি অ্যাকাউন্ট খুলুন, কোর্সের পাতায় গিয়ে বিকাশ, নগদ বা ব্যাংকে ফি পাঠিয়ে ট্রানজেকশন আইডি দিন। যাচাইয়ের পর কোর্স চালু হবে — সব কোর্স এক অ্যাকাউন্টেই।</p>
 		<ol class="mb-steps">
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">١</span><strong>কোর্স বাছাই</strong><span>পছন্দের কোর্স ঠিক করুন</span></li>
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٢</span><strong>টাকা পাঠান</strong><span>বিকাশ · নগদ · ব্যাংক</span></li>
-			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٣</span><strong>ভর্তি ফর্ম</strong><span>নাম, নম্বর ও TrxID দিন</span></li>
+			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٣</span><strong>আবেদন জমা</strong><span>কোর্সের পাতায় TrxID দিন</span></li>
 			<li><span class="mb-steps__num" lang="ar" aria-hidden="true">٤</span><strong>কোর্স চালু</strong><span>যাচাইয়ের পর শেখা শুরু</span></li>
 		</ol>
 		<div class="mb-hero__actions">
-			<a class="mb-btn" href="/account" style="background:#FBF6EC;color:#7A1F2B;border-color:#FBF6EC">ভর্তি ফর্ম খুলুন</a>
+			<a class="mb-btn" href="/learn" style="background:#FBF6EC;color:#7A1F2B;border-color:#FBF6EC">অ্যাকাউন্ট খুলে ভর্তি হোন</a>
 		</div>
 	</div>
 </section>
@@ -223,12 +215,13 @@
 		<span>© <span data-year>২০২৬</span> আল-লিসানুল মুবীন</span>
 		<ul class="mb-footer__menu">
 			<li><a href="/#courses">কোর্স</a></li>
-			<li><a href="/account">ভর্তি ফর্ম</a></li>
+			<li><a href="/learn">আমার কোর্স</a></li>
 		</ul>
 	</div>
 </footer>
 
 <script src="/assets/js/config.js"></script>
 <script src="/assets/js/site.js"></script>
+<script type="module" src="/assets/js/home.js"></script>
 </body>
 </html>

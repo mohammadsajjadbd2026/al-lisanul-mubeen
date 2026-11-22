@@ -1,0 +1,199 @@
+/* ==========================================================
+   আল-লিসানুল মুবীন — LMS অংশ (শিক্ষার্থী ও অ্যাডমিন)
+   ========================================================== */
+.lx-auth { display: inline-flex; align-items: center; gap: 18px; }
+.lx-wrap { max-width: 1200px; margin: 0 auto; padding: 48px 24px 88px; }
+.lx-narrow { max-width: 560px; margin: 0 auto; }
+.lx-h1 { font-family: var(--mb-serif); font-weight: 600; font-size: clamp(28px, 3.6vw, 38px); line-height: 1.35; margin: 0 0 8px; }
+.lx-sub { color: var(--mb-muted); margin: 0 0 28px; }
+.lx-muted { color: var(--mb-muted); }
+.lx-center { text-align: center; }
+.lx-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.lx-spacer { flex: 1; }
+.lx-card {
+	background: var(--mb-paper); border: 1px solid var(--mb-rule); border-radius: 4px;
+	padding: 24px 26px;
+}
+.lx-card + .lx-card { margin-top: 18px; }
+.lx-card h2, .lx-card h3 { font-family: var(--mb-serif); font-weight: 600; margin: 0 0 12px; }
+.lx-card h2 { font-size: 24px; } .lx-card h3 { font-size: 20px; }
+.lx-empty { text-align: center; color: var(--mb-muted); padding: 40px 12px; border: 1px dashed var(--mb-rule); }
+.lx-loading { color: var(--mb-muted); padding: 24px 0; }
+.lx-error { background: #FBE9E7; border: 1px solid #E0A59A; color: #7A1F2B; padding: 12px 16px; border-radius: 4px; }
+.lx-note { background: #FFF7E0; border: 1px solid #E6CF8F; padding: 12px 16px; border-radius: 4px; }
+
+/* বোতাম */
+button.mb-btn { cursor: pointer; font-family: inherit; }
+.mb-btn[disabled], .mb-btn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+.lx-btn-danger { background: transparent; color: #9B2C2C; border: 1.5px solid #9B2C2C; }
+.lx-btn-danger:hover { background: #9B2C2C; color: #fff; }
+.lx-link { background: none; border: 0; padding: 0; color: var(--mb-accent); font: inherit; cursor: pointer; text-decoration: underline; }
+.lx-icon-btn {
+	background: transparent; border: 1px solid var(--mb-rule); border-radius: 2px; min-width: 36px; min-height: 36px;
+	color: var(--mb-ink); cursor: pointer; font: inherit; display: inline-flex; align-items: center; justify-content: center;
+}
+.lx-icon-btn:hover { border-color: var(--mb-accent); color: var(--mb-accent); }
+
+/* ট্যাব */
+.lx-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--mb-rule); margin-bottom: 22px; flex-wrap: wrap; }
+.lx-tabs button {
+	background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 16px; font: inherit; font-size: 16px;
+	color: var(--mb-ink-2); cursor: pointer; min-height: 44px;
+}
+.lx-tabs button[aria-selected="true"] { border-bottom-color: var(--mb-accent); color: var(--mb-accent); font-weight: 600; }
+
+/* ফর্ম */
+.lx-form { display: grid; gap: 16px; }
+.lx-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.mb-field textarea {
+	font: inherit; font-size: 16px; color: var(--mb-ink); background: #FFFDF8; border: 1px solid var(--mb-rule);
+	border-radius: 2px; padding: 11px 14px; width: 100%; min-height: 110px; resize: vertical;
+}
+.mb-field textarea.lx-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; min-height: 160px; direction: ltr; }
+.lx-check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400 !important; }
+.lx-check input { width: 20px; height: 20px; margin-top: 4px; accent-color: var(--mb-accent); }
+details.lx-adv > summary { cursor: pointer; color: var(--mb-accent); font-weight: 600; padding: 6px 0; }
+
+/* অগ্রগতি */
+.lx-bar { height: 8px; background: var(--mb-band); border-radius: 99px; overflow: hidden; }
+.lx-bar > i { display: block; height: 100%; background: var(--mb-accent); border-radius: 99px; }
+.lx-pill { display: inline-block; font-size: 13px; padding: 2px 10px; border-radius: 99px; border: 1px solid var(--mb-rule); background: var(--mb-paper); white-space: nowrap; }
+.lx-pill.is-ok { background: #E4F2E7; border-color: #9BC8A6; color: #24543A; }
+.lx-pill.is-wait { background: #FFF4D6; border-color: #E2C87A; color: #6B4D07; }
+.lx-pill.is-bad { background: #FBE9E7; border-color: #E0A59A; color: #7A1F2B; }
+
+/* আমার কোর্স / কোর্স তালিকা */
+.lx-courses { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.lx-ccard { background: var(--mb-paper); border: 1px solid var(--mb-rule); display: flex; flex-direction: column; }
+.lx-ccard__img { aspect-ratio: 16/9; background: var(--mb-band); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.lx-ccard__img img { width: 100%; height: 100%; object-fit: cover; }
+.lx-ccard__img span { font-family: var(--mb-ar-display); font-size: 52px; color: var(--mb-accent); }
+.lx-ccard__body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.lx-ccard__body h3 { margin: 0; font-family: var(--mb-serif); font-size: 21px; }
+.lx-ccard__foot { margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+
+/* কোর্সের পাতা */
+.lx-hero { display: flex; flex-wrap: wrap; gap: 36px; align-items: flex-start; }
+.lx-hero__media { flex: 1 1 360px; aspect-ratio: 16/9; background: var(--mb-band); border: 1px solid var(--mb-rule); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.lx-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+.lx-hero__media span { font-family: var(--mb-ar-display); font-size: 84px; color: var(--mb-accent); }
+.lx-hero__info { flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.lx-prose { line-height: 1.85; }
+.lx-prose :is(h2, h3) { font-family: var(--mb-serif); }
+.lx-prose [dir="rtl"], .lx-prose .ar { font-family: var(--mb-ar); font-size: 1.35em; }
+.lx-prose img { max-width: 100%; }
+
+.lx-outline { list-style: none; margin: 0; padding: 0; }
+.lx-outline__ch { font-family: var(--mb-serif); font-weight: 600; font-size: 18px; padding: 18px 0 8px; border-bottom: 2px solid var(--mb-rule-soft); }
+.lx-outline__ls a, .lx-outline__ls > span {
+	display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center;
+	padding: 12px 6px; border-bottom: 1px dotted var(--mb-gold); color: var(--mb-ink); text-decoration: none;
+}
+.lx-outline__ls a:hover { background: var(--mb-band); }
+.lx-outline__ls.is-current a { background: var(--mb-band); font-weight: 600; }
+.lx-ico { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; color: var(--mb-muted); }
+.lx-ico.is-done { color: #2E7D4F; }
+.lx-ico.is-lock { color: var(--mb-muted); }
+
+/* দরস প্লেয়ার */
+.lx-player { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: start; }
+.lx-player__side { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; background: var(--mb-paper); border: 1px solid var(--mb-rule); padding: 8px 14px 14px; }
+.lx-player__side .lx-outline__ch { font-size: 16px; padding-top: 14px; }
+.lx-player__side .lx-outline__ls a, .lx-player__side .lx-outline__ls > span { font-size: 15px; padding: 9px 4px; }
+@media (max-width: 960px) { .lx-player { grid-template-columns: 1fr; } .lx-player__side { position: static; max-height: none; } }
+.lx-crumb { font-size: 15px; color: var(--mb-muted); margin: 0 0 6px; }
+.lx-crumb a { color: var(--mb-muted); }
+.lx-video { position: relative; aspect-ratio: 16/9; background: #000; margin: 18px 0; }
+.lx-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.lx-frame { width: 100%; border: 0; display: block; min-height: 120px; background: transparent; }
+.lx-files { list-style: none; margin: 0; padding: 0; }
+.lx-files li { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px dotted var(--mb-gold); }
+.lx-files li:last-child { border-bottom: 0; }
+.lx-nextprev { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+/* কুইজ */
+.lx-quiz ol { margin: 0; padding: 0; list-style: none; counter-reset: q; display: grid; gap: 18px; }
+.lx-quiz li.lx-q { counter-increment: q; }
+.lx-quiz .lx-q__t { font-weight: 600; margin: 0 0 8px; }
+.lx-quiz .lx-q__t::before { content: counter(q, bengali) '. '; color: var(--mb-accent); }
+.lx-quiz label.lx-opt {
+	display: flex; gap: 10px; align-items: center; padding: 10px 14px; margin: 6px 0; border: 1px solid var(--mb-rule);
+	background: #FFFDF8; cursor: pointer; border-radius: 2px; min-height: 44px;
+}
+.lx-quiz label.lx-opt:hover { border-color: var(--mb-accent); }
+.lx-quiz input[type=radio] { accent-color: var(--mb-accent); width: 18px; height: 18px; }
+.lx-quiz .is-right { border-color: #2E7D4F !important; background: #E4F2E7 !important; }
+.lx-quiz .is-wrong { border-color: #B23B3B !important; background: #FBE9E7 !important; }
+.lx-quiz .lx-q__ex { font-size: 15px; color: var(--mb-ink-2); margin: 6px 0 0; }
+.lx-result { margin-top: 18px; padding: 16px 18px; border-radius: 4px; font-weight: 600; }
+.lx-result.is-pass { background: #E4F2E7; color: #24543A; }
+.lx-result.is-fail { background: #FBE9E7; color: #7A1F2B; }
+
+/* সার্টিফিকেট */
+.lx-cert {
+	background: #FFFDF6; border: 2px solid var(--mb-accent); outline: 1px solid var(--mb-gold); outline-offset: -14px;
+	padding: 64px 48px; text-align: center; max-width: 900px; margin: 0 auto; aspect-ratio: 1.414 / 1;
+	display: flex; flex-direction: column; justify-content: center; gap: 14px;
+}
+.lx-cert__logo { width: 280px; max-width: 70%; margin: 0 auto; }
+.lx-cert__name { font-family: var(--mb-serif); font-size: clamp(28px, 4vw, 42px); color: var(--mb-accent); margin: 6px 0; }
+.lx-cert__course { font-family: var(--mb-serif); font-size: clamp(20px, 2.6vw, 28px); font-weight: 600; }
+.lx-cert__meta { color: var(--mb-muted); font-size: 15px; }
+@media print {
+	.mb-header, .mb-footer, .lx-noprint { display: none !important; }
+	body { background: #fff; }
+	.lx-wrap { padding: 0; }
+	.lx-cert { border-width: 2px; max-width: none; }
+	@page { size: A4 landscape; margin: 12mm; }
+}
+
+/* অ্যাডমিন */
+.lx-admin { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .lx-admin { grid-template-columns: 1fr; } }
+.lx-admin__nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 16px; }
+@media (max-width: 860px) { .lx-admin__nav { position: static; flex-direction: row; flex-wrap: wrap; } }
+.lx-admin__nav button {
+	text-align: start; background: none; border: 0; border-inline-start: 3px solid transparent; padding: 11px 14px; font: inherit;
+	color: var(--mb-ink-2); cursor: pointer; min-height: 44px;
+}
+.lx-admin__nav button[aria-current="page"] { border-inline-start-color: var(--mb-accent); color: var(--mb-accent); background: var(--mb-paper); font-weight: 600; }
+.lx-admin__nav .lx-count { margin-inline-start: 6px; }
+.lx-table-wrap { overflow-x: auto; border: 1px solid var(--mb-rule); background: var(--mb-paper); }
+table.lx-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.lx-table th, .lx-table td { text-align: start; padding: 10px 12px; border-bottom: 1px solid var(--mb-rule-soft); vertical-align: top; }
+.lx-table th { font-weight: 600; background: var(--mb-band); white-space: nowrap; }
+.lx-table tr:last-child td { border-bottom: 0; }
+.lx-cur { border: 1px solid var(--mb-rule); background: var(--mb-paper); }
+.lx-cur__ch { display: flex; gap: 8px; align-items: center; padding: 12px 14px; background: var(--mb-band); border-bottom: 1px solid var(--mb-rule-soft); }
+.lx-cur__ch strong { font-family: var(--mb-serif); font-size: 17px; }
+.lx-cur__ls { display: flex; gap: 8px; align-items: center; padding: 10px 14px 10px 28px; border-bottom: 1px solid var(--mb-rule-soft); }
+.lx-cur__ls:last-child { border-bottom: 0; }
+.lx-cur__ls .lx-t { flex: 1; min-width: 0; }
+.lx-cur__ls .lx-t small { color: var(--mb-muted); }
+.lx-poster-prev { width: 240px; aspect-ratio: 16/9; background: var(--mb-band); border: 1px solid var(--mb-rule); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.lx-poster-prev img { width: 100%; height: 100%; object-fit: cover; }
+.lx-qedit { border: 1px solid var(--mb-rule); padding: 14px; background: #FFFDF8; display: grid; gap: 10px; }
+.lx-qedit + .lx-qedit { margin-top: 12px; }
+.lx-qopt { display: flex; gap: 8px; align-items: center; }
+.lx-qopt input[type=text] { flex: 1; }
+.lx-qopt input[type=radio] { accent-color: #2E7D4F; width: 20px; height: 20px; }
+
+/* সম্পাদক */
+.lx-editor { border: 1px solid var(--mb-rule); background: #FFFDF8; }
+.lx-editor__bar { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; border-bottom: 1px solid var(--mb-rule); background: var(--mb-band); }
+.lx-editor__bar button { background: #FFFDF8; border: 1px solid var(--mb-rule); min-width: 36px; min-height: 36px; padding: 0 10px; cursor: pointer; font: inherit; font-size: 14px; border-radius: 2px; }
+.lx-editor__bar button[aria-pressed="true"] { background: var(--mb-accent); color: var(--mb-on-accent); }
+.lx-editor__area { min-height: 220px; padding: 14px 16px; outline: none; line-height: 1.8; }
+.lx-editor__area:focus { box-shadow: inset 0 0 0 2px var(--mb-accent); }
+.lx-editor textarea { border: 0 !important; min-height: 260px !important; }
+
+/* টোস্ট ও ডায়ালগ */
+.lx-toast {
+	position: fixed; inset-inline: 0; bottom: 24px; margin: 0 auto; width: max-content; max-width: 92vw; z-index: 1000;
+	background: var(--mb-ink); color: #FBF6EC; padding: 12px 20px; border-radius: 4px; box-shadow: 0 6px 24px rgba(0,0,0,.2);
+	opacity: 0; transform: translateY(10px); transition: opacity .2s, transform .2s; pointer-events: none;
+}
+.lx-toast.is-on { opacity: 1; transform: none; }
+.lx-toast.is-err { background: #7A1F2B; }
+dialog.lx-dialog { border: 1px solid var(--mb-rule); background: var(--mb-paper); padding: 24px; max-width: 520px; width: 92vw; }
+dialog.lx-dialog::backdrop { background: rgba(43, 29, 22, .45); }

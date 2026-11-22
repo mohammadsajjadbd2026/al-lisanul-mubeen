@@ -5,11 +5,12 @@
   "cleanUrls": true,
   "functions": {
     "api/nahw/lesson.js": { "includeFiles": "courses/nahw/{lessons/**,config.json}" },
-    "api/course.js": { "includeFiles": "courses/{hatekhori/content.html,nahw/config.json}" }
+    "api/course.js": { "includeFiles": "courses/{hatekhori/content.html,nahw/config.json}" },
+    "api/admin/legacy.js": { "includeFiles": "courses/{legacy/*.json,nahw/config.json}" }
   },
   "headers": [
     { "source": "/hatekhori", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/admin", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/nahw/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+    { "source": "/nahw/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/(admin|admin-old|account|learn|lesson|certificate)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
   ]
 }

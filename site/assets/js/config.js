@@ -5,8 +5,12 @@
 window.SITE = {
   name: 'আল-লিসানুল মুবীন',
 
-  // Supabase (প্রকাশ্য কী — নিরাপদ; সুরক্ষা আছে ডেটাবেসের RLS-এ)
-  supabase: { url: 'https://svnoseimqutashoyqesn.supabase.co', anon: 'sb_publishable_ptlOFq8xwgs2Wg-DzUsHyA_BGpwZRXD' },
+  // ডেটাবেস (Supabase) — publishable key প্রকাশ্য রাখা নিরাপদ; সুরক্ষা ডেটাবেসের নিয়মে (RLS)
+  supabase: {
+    url: 'https://svnoseimqutashoyqesn.supabase.co',
+    anon: 'sb_publishable_ptlOFq8xwgs2Wg-DzUsHyA_BGpwZRXD',
+    anonKey: 'sb_publishable_ptlOFq8xwgs2Wg-DzUsHyA_BGpwZRXD'
+  },
 
   // পেমেন্টের তথ্য (খালি থাকলে সাইটে "[শীঘ্রই যোগ হবে]" দেখাবে)
   bkash: '01890435248',        // যেমন: '01XXXXXXXXX' (Personal — Send Money)
@@ -23,14 +27,14 @@ window.SITE = {
       title: 'আরবি ভাষার হাতেখড়ি',
       price: '2500',     // এখনকার (ছাড়ের) দাম
       oldPrice: '3000',  // আসল দাম — কেটে দেখাবে; ছাড় না থাকলে খালি রাখুন
-      url: '/hatekhori',
+      url: '/course?c=arabi-bhashar-hatekhori',
       open: true
     },
     nahw: {
       title: 'নাহুর সহজ পাঠ',
       price: '',      // দাম ঠিক করে লিখুন, যেমন '3000'
       oldPrice: '',
-      url: '/nahw',
+      url: '/course?c=nahwer-sohoj-path',
       open: true
     },
     sarf: { title: 'সরফের সহজ পাঠ', price: '', url: '', open: false }

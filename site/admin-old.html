@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>অ্যাডমিন — ভর্তি অনুমোদন</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@600;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<style>
+.adm{max-width:1050px;margin:0 auto;padding:32px 18px 70px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.tabs button{border:1px solid #ead9b8;background:#fff;border-radius:999px;padding:6px 16px;font:inherit;cursor:pointer}
+.tabs button.on{background:#7a1f2b;color:#fff;border-color:#7a1f2b}
+.tw{overflow:auto;background:#fff;border:1px solid #ead9b8;border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:10px 12px;text-align:start;border-bottom:1px solid #f0e4cc;vertical-align:top}
+th{background:#f9f0dc;white-space:nowrap}
+td small{color:#6b5d57;display:block}
+.b{border:0;border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;margin:2px;color:#fff}
+.ok{background:#2f7a3f}.no{background:#a4262c}.un{background:#8a7a60}
+.pill{padding:2px 10px;border-radius:999px;font-size:13px;background:#f6ecd5;white-space:nowrap}
+.pill.approved{background:#dff1e1;color:#1f5a2c}.pill.pending{background:#fff0c9;color:#7a5a00}.pill.rejected{background:#f8dcdc;color:#8a1f24}
+#note{margin:12px 0;color:#a4262c}
+</style>
+</head>
+<body>
+<main class="adm">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+    <h1 class="mb-h1" style="margin:0">ভর্তি অনুমোদন</h1>
+    <a class="mb-btn mb-btn--ghost mb-btn--sm" href="/account">← অ্যাকাউন্ট</a>
+  </div>
+  <p id="note" role="status"></p>
+  <div id="panel" hidden>
+    <div class="tabs" id="tabs"></div>
+    <input id="q" type="search" placeholder="নাম, ইমেইল বা TrxID দিয়ে খুঁজুন" style="width:100%;max-width:360px;padding:8px 12px;border:1px solid #ead9b8;border-radius:10px;font:inherit">
+    <div class="tw" style="margin-top:12px"><table><thead><tr>
+      <th>শিক্ষার্থী</th><th>কোর্স</th><th>পেমেন্ট</th><th>অবস্থা</th><th>কাজ</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/auth.js"></script>
+<script>
+(async function(){
+  var sb=MB.sb, note=document.getElementById('note'), all=[], tab='pending', q='';
+  var s=await MB.session();
+  if(!s){note.innerHTML='প্রথমে <a href="/account">প্রবেশ করুন</a>।';return}
+  var p=await MB.profile(s.user.id);
+  if(!p.is_admin){note.textContent='এই পাতা শুধু অ্যাডমিনের জন্য।';return}
+  document.getElementById('panel').hidden=false; note.textContent='';
+  var LABEL={pending:'অপেক্ষমাণ',approved:'অনুমোদিত',rejected:'বাতিল',all:'সব'};
+  function td(t,sub){var c=document.createElement('td');var a=document.createElement('span');a.textContent=t||'';c.appendChild(a);
+    (sub||[]).forEach(function(x){if(!x)return;var m=document.createElement('small');m.textContent=x;c.appendChild(m)});return c}
+  function btn(txt,cls,st,id){var b=document.createElement('button');b.className='b '+cls;b.textContent=txt;
+    b.onclick=async function(){b.disabled=true;var r=await sb.rpc('admin_set_enrollment',{p_id:id,p_status:st});
+      if(r.error){note.textContent='ত্রুটি: '+r.error.message;b.disabled=false;return} note.textContent='';await load()};return b}
+  function paint(){
+    var tabs=document.getElementById('tabs');tabs.textContent='';
+    ['pending','approved','rejected','all'].forEach(function(k){
+      var n=k==='all'?all.length:all.filter(function(x){return x.status===k}).length;
+      var b=document.createElement('button');b.textContent=LABEL[k]+' ('+n+')';b.className=tab===k?'on':'';b.onclick=function(){tab=k;paint()};tabs.appendChild(b)});
+    var body=document.getElementById('rows');body.textContent='';
+    var rows=all.filter(function(x){return (tab==='all'||x.status===tab)&&(!q||[x.full_name,x.email,x.trx_id,x.sender].join(' ').toLowerCase().indexOf(q)>=0)});
+    if(!rows.length){var tr=document.createElement('tr');var c=document.createElement('td');c.colSpan=5;c.textContent='কোনো আবেদন নেই।';tr.appendChild(c);body.appendChild(tr)}
+    rows.forEach(function(x){
+      var tr=document.createElement('tr');
+      tr.appendChild(td(x.full_name||'(নাম নেই)',[x.email]));
+      tr.appendChild(td(MB.COURSES[x.course]||x.course,[new Date(x.created_at).toLocaleString('bn-BD')]));
+      tr.appendChild(td((x.method||'')+(x.amount?' — ৳'+x.amount:''),['TrxID: '+(x.trx_id||'—'),'প্রেরক: '+(x.sender||'—')]));
+      var st=document.createElement('td');var pl=document.createElement('span');pl.className='pill '+x.status;pl.textContent=MB.STATUS[x.status];st.appendChild(pl);tr.appendChild(st);
+      var act=document.createElement('td');
+      if(x.status!=='approved')act.appendChild(btn('অনুমোদন','ok','approved',x.id));
+      if(x.status==='pending')act.appendChild(btn('বাতিল','no','rejected',x.id));
+      if(x.status==='approved')act.appendChild(btn('এক্সেস বন্ধ','no','rejected',x.id));
+      if(x.status==='rejected')act.appendChild(btn('পেন্ডিংয়ে ফেরান','un','pending',x.id));
+      tr.appendChild(act);body.appendChild(tr)});
+  }
+  async function load(){var r=await sb.rpc('admin_list_enrollments');if(r.error){note.textContent='ত্রুটি: '+r.error.message;return}all=r.data||[];paint()}
+  document.getElementById('q').oninput=function(e){q=e.target.value.trim().toLowerCase();paint()};
+  load();
+})();
+</script>
+</body>
+</html>
