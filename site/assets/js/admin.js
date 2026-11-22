@@ -22,12 +22,14 @@ async function boot() {
       <button type="button" data-go="courses">কোর্সসমূহ</button>
       <button type="button" data-go="requests">ভর্তি আবেদন <span class="lx-pill lx-count" id="lx-req-n" hidden></span></button>
       <button type="button" data-go="students">শিক্ষার্থী</button>
+      <button type="button" data-go="site">শিক্ষক ও মতামত <span class="lx-pill lx-count" id="lx-rev-n" hidden></span></button>
       <button type="button" data-go="import">পুরোনো কোর্স আমদানি</button>
     </nav>
     <section id="lx-view" aria-live="polite"></section></div>`;
   $$('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   window.addEventListener('hashchange', route);
   refreshRequests();
+  refreshReviews();
   route();
 }
 function go(h) { if (location.hash === '#' + h) route(); else location.hash = h; }
@@ -43,6 +45,7 @@ async function route() {
     else if (view === 'lesson') await viewLesson(arg);
     else if (view === 'requests') await viewRequests();
     else if (view === 'students') await viewStudents();
+    else if (view === 'site') await viewSite();
     else if (view === 'import') await viewImport();
     else await viewCourses();
   } catch (e) { v.innerHTML = `<p class="lx-error">${esc(trErr(e))}</p>`; console.error(e); }
@@ -458,6 +461,127 @@ function addToCourse(s) {
     if (error) return toast(trErr(error), 'err');
     toast('কোর্সে যোগ হয়েছে।'); viewStudents();
   });
+}
+
+// ---------- শিক্ষকমণ্ডলী ও শিক্ষার্থীদের মতামত ----------
+const SITE_SQL_MSG = '<p class="lx-error">শিক্ষক ও মতামতের টেবিল এখনো তৈরি হয়নি। Supabase → SQL Editor-এ <code>supabase/site.sql</code> ফাইলটি একবার চালান।</p>';
+async function refreshReviews() {
+  const { count, error } = await sb.from('lms_testimonials').select('id', { count: 'exact', head: true }).eq('approved', false);
+  const el = $('#lx-rev-n'); if (!el) return;
+  el.hidden = error || !count; if (count) el.textContent = bn(count);
+}
+async function viewSite() {
+  const [t, r] = await Promise.all([
+    sb.from('lms_teachers').select('*').order('sort').order('created_at'),
+    sb.from('lms_testimonials').select('*').order('approved').order('created_at', { ascending: false }),
+  ]);
+  if (t.error || r.error) { view().innerHTML = '<h1 class="lx-h1">শিক্ষক ও মতামত</h1>' + SITE_SQL_MSG; return; }
+  const teachers = t.data, reviews = r.data;
+  view().innerHTML = `<h1 class="lx-h1">শিক্ষকমণ্ডলী</h1>
+    <p class="lx-muted">হোমপেজ ও “আমাদের সম্পর্কে” পাতায় এই ক্রমে দেখাবে।</p>
+    <div id="lx-teachers">${teachers.map(teacherForm).join('')}</div>
+    <button class="mb-btn mb-btn--sm" type="button" id="t-add">+ নতুন শিক্ষক</button>
+    <h1 class="lx-h1" style="margin-top:48px">শিক্ষার্থীদের মতামত</h1>
+    <p class="lx-muted">শিক্ষার্থীরা “আমার কোর্স” পাতা থেকে মতামত পাঠায়। অনুমোদন দিলে হোমপেজে দেখাবে। WhatsApp-এ পাওয়া আসল মতামতও এখানে নিজে যোগ করতে পারেন।</p>
+    <div id="lx-reviews">${reviews.length ? reviews.map(reviewRow).join('') : '<p class="lx-empty">এখনো কোনো মতামত আসেনি।</p>'}</div>
+    <details class="lx-card" style="margin-top:18px"><summary><b>+ নিজে মতামত যোগ করুন</b></summary>
+      <form class="lx-form" id="r-new" style="margin-top:14px"><div class="lx-grid2">
+        <div class="mb-field"><label for="rn-name">শিক্ষার্থীর নাম</label><input id="rn-name" required></div>
+        <div class="mb-field"><label for="rn-course">কোর্স</label><input id="rn-course" list="rn-courses"><datalist id="rn-courses">${courses.map((c) => `<option value="${esc(c.title)}">`).join('')}</datalist></div>
+        <div class="mb-field"><label for="rn-rating">রেটিং</label><select id="rn-rating">${[5, 4, 3, 2, 1].map((n) => `<option value="${n}">${bn(n)} তারা</option>`).join('')}</select></div></div>
+        <div class="mb-field"><label for="rn-body">মতামত</label><textarea id="rn-body" rows="4" required minlength="10"></textarea></div>
+        <button class="mb-btn mb-btn--sm" type="submit">যোগ ও অনুমোদন</button></form></details>`;
+  if (!courses.length) await loadCourses();
+
+  $('#t-add').addEventListener('click', async () => {
+    const { error } = await sb.from('lms_teachers').insert({ name: 'নতুন শিক্ষক', sort: teachers.length + 1, published: false });
+    if (error) return toast(trErr(error), 'err');
+    viewSite();
+  });
+  $$('[data-teacher]').forEach((f) => {
+    const id = f.dataset.teacher; let photo = teachers.find((x) => x.id === id).photo_url;
+    $('[data-photo]', f).addEventListener('change', async (e) => {
+      const file = e.target.files[0]; if (!file) return;
+      const path = `teachers/${id}-${Date.now()}.${(file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+      const { error } = await sb.storage.from('lms-public').upload(path, file, { contentType: file.type, upsert: true });
+      if (error) return toast(trErr(error), 'err');
+      photo = publicUrl(path); $('[data-prev]', f).innerHTML = `<img src="${esc(photo)}" alt="">`;
+      toast('ছবি আপলোড হয়েছে — সংরক্ষণ চাপুন।');
+    });
+    $('[data-nophoto]', f)?.addEventListener('click', () => { photo = null; $('[data-prev]', f).innerHTML = '<span>ছবি নেই</span>'; });
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const v = (n) => f.elements[n].value.trim();
+      const { error } = await sb.from('lms_teachers').update({
+        name: v('name'), role: v('role') || null, bio: v('bio') || null, sort: Number(v('sort')) || 0,
+        published: f.elements.published.checked, photo_url: photo,
+      }).eq('id', id);
+      if (error) return toast(trErr(error), 'err');
+      toast('সংরক্ষিত হয়েছে।');
+    });
+    $('[data-tdel]', f).addEventListener('click', async () => {
+      if (!confirm('এই শিক্ষককে তালিকা থেকে মুছবেন?')) return;
+      const { error } = await sb.from('lms_teachers').delete().eq('id', id);
+      if (error) return toast(trErr(error), 'err');
+      viewSite();
+    });
+  });
+
+  $$('[data-review]').forEach((row) => {
+    const id = row.dataset.review;
+    $('[data-approve]', row)?.addEventListener('click', async (e) => {
+      const on = e.target.dataset.approve === '1';
+      const { error } = await sb.from('lms_testimonials').update({ approved: on }).eq('id', id);
+      if (error) return toast(trErr(error), 'err');
+      toast(on ? 'অনুমোদিত — হোমপেজে দেখাবে।' : 'লুকানো হয়েছে।'); refreshReviews(); viewSite();
+    });
+    $('[data-rdel]', row).addEventListener('click', async () => {
+      if (!confirm('মতামতটি মুছবেন?')) return;
+      const { error } = await sb.from('lms_testimonials').delete().eq('id', id);
+      if (error) return toast(trErr(error), 'err');
+      refreshReviews(); viewSite();
+    });
+  });
+
+  $('#r-new').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { error } = await sb.from('lms_testimonials').insert({
+      name: $('#rn-name').value.trim(), course_title: $('#rn-course').value.trim() || null,
+      rating: Number($('#rn-rating').value), body: $('#rn-body').value.trim(), approved: true,
+    });
+    if (error) return toast(trErr(error), 'err');
+    toast('মতামত যোগ হয়েছে।'); viewSite();
+  });
+}
+function teacherForm(t) {
+  return `<form class="lx-card lx-form" data-teacher="${t.id}">
+    <div class="lx-row" style="align-items:flex-start">
+      <div class="lx-tphoto" data-prev>${t.photo_url ? `<img src="${esc(t.photo_url)}" alt="">` : '<span>ছবি নেই</span>'}</div>
+      <div style="flex:1;min-width:240px" class="lx-form">
+        <div class="lx-grid2">
+          <div class="mb-field"><label>নাম</label><input name="name" required value="${esc(t.name)}"></div>
+          <div class="mb-field"><label>পদবি / দায়িত্ব</label><input name="role" placeholder="যেমন: নাহু ও সরফের শিক্ষক" value="${esc(t.role || '')}"></div>
+        </div>
+        <div class="mb-field"><label>পরিচিতি</label><textarea name="bio" rows="3">${esc(t.bio || '')}</textarea></div>
+        <div class="lx-row">
+          <label class="mb-field" style="max-width:120px"><span>ক্রম</span><input name="sort" type="number" value="${t.sort}"></label>
+          <label class="lx-check"><input type="checkbox" name="published"${t.published ? ' checked' : ''}> সাইটে দেখাবে</label>
+          <label class="mb-btn mb-btn--sm mb-btn--ghost" style="cursor:pointer">ছবি বদলান<input type="file" accept="image/*" data-photo hidden></label>
+          ${t.photo_url ? '<button class="lx-link" type="button" data-nophoto>ছবি সরান</button>' : ''}
+        </div>
+      </div></div>
+    <div class="lx-row"><button class="mb-btn mb-btn--sm" type="submit">সংরক্ষণ</button><span class="lx-spacer"></span>
+      <button class="mb-btn mb-btn--sm lx-btn-danger" type="button" data-tdel>মুছুন</button></div></form>`;
+}
+function reviewRow(r) {
+  return `<div class="lx-card lx-review" data-review="${r.id}">
+    <div class="lx-row"><b>${esc(r.name)}</b>${r.course_title ? `<span class="lx-muted">· ${esc(r.course_title)}</span>` : ''}
+      ${r.rating ? `<span class="mb-stars">${'★'.repeat(r.rating)}</span>` : ''}<span class="lx-spacer"></span>
+      <span class="lx-pill ${r.approved ? 'is-ok' : 'is-wait'}">${r.approved ? 'সাইটে দেখাচ্ছে' : 'অনুমোদনের অপেক্ষায়'}</span></div>
+    <p style="margin:10px 0">${esc(r.body)}</p>
+    <div class="lx-row"><span class="lx-muted" style="font-size:14px">${fmtDate(r.created_at)}${r.user_id ? '' : ' · শিক্ষক যোগ করেছেন'}</span><span class="lx-spacer"></span>
+      ${r.approved ? '<button class="mb-btn mb-btn--sm mb-btn--ghost" type="button" data-approve="0">লুকান</button>' : '<button class="mb-btn mb-btn--sm" type="button" data-approve="1">অনুমোদন দিন</button>'}
+      <button class="mb-btn mb-btn--sm lx-btn-danger" type="button" data-rdel>মুছুন</button></div></div>`;
 }
 
 // ---------- পুরোনো কোর্স আমদানি ----------

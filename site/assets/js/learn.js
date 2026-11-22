@@ -93,7 +93,8 @@ async function renderDashboard(p) {
     <h2 class="mb-h2" style="text-align:start;font-size:28px;margin:12px 0 18px">আমার কোর্স</h2>
     <div id="lx-mine"><p class="lx-loading">লোড হচ্ছে…</p></div>
     <h2 class="mb-h2" style="text-align:start;font-size:28px;margin:44px 0 18px">সব কোর্স</h2>
-    <div id="lx-all"><p class="lx-loading">লোড হচ্ছে…</p></div>`;
+    <div id="lx-all"><p class="lx-loading">লোড হচ্ছে…</p></div>
+    <div id="review"></div>`;
   $('#lx-out').addEventListener('click', async () => { await sb.auth.signOut(); render(); });
   $('#lx-name').addEventListener('click', async () => {
     const name = prompt('সার্টিফিকেটে যে নাম ছাপা হবে:', p.full_name || '');
@@ -126,6 +127,36 @@ async function renderDashboard(p) {
       <h3>${esc(c.title)}</h3>${c.subtitle ? `<p class="lx-muted" style="margin:0">${esc(c.subtitle)}</p>` : ''}
       <div class="lx-ccard__foot">${c.status === 'soon' ? '<span class="lx-pill">শীঘ্রই</span>' : ''}<a class="mb-btn mb-btn--sm mb-btn--ghost" href="/course?c=${esc(c.slug)}">বিস্তারিত</a></div>
     </div></article>`).join('')}</div>`;
+  reviewBox(p, (mine || []).filter((c) => c.status === 'active'));
+}
+
+// ---------- শিক্ষার্থীর মতামত ----------
+async function reviewBox(p, active) {
+  const box = $('#review'); if (!box || !active.length) return;
+  const { data: old, error } = await sb.from('lms_testimonials').select('name,course_title,body,rating,approved').eq('user_id', p.id).maybeSingle();
+  if (error && error.code !== 'PGRST116') return; // টেবিল না থাকলে চুপচাপ
+  const rating = old?.rating || 5;
+  box.innerHTML = `<h2 class="mb-h2" style="text-align:start;font-size:28px;margin:44px 0 8px">আপনার মতামত</h2>
+    <p class="lx-sub">কোর্সটি কেমন লাগছে? আপনার কয়েক লাইন অন্যদের সিদ্ধান্ত নিতে সাহায্য করবে। শিক্ষক দেখে নেওয়ার পর হোমপেজে দেখাবে।</p>
+    ${old ? `<p><span class="lx-pill ${old.approved ? 'is-ok' : 'is-wait'}">${old.approved ? 'আপনার মতামত সাইটে দেখাচ্ছে' : 'আপনার মতামত শিক্ষকের অনুমোদনের অপেক্ষায়'}</span></p>` : ''}
+    <form class="lx-card lx-form" id="rv-form"><div class="lx-grid2">
+      <div class="mb-field"><label for="rv-name">নাম (যেভাবে দেখাবে)</label><input id="rv-name" required maxlength="80" value="${esc(old?.name || p.full_name || '')}"></div>
+      <div class="mb-field"><label for="rv-course">কোর্স</label><select id="rv-course">${active.map((c) => `<option${old?.course_title === c.title ? ' selected' : ''}>${esc(c.title)}</option>`).join('')}</select></div></div>
+      <fieldset class="mb-field" style="border:0;padding:0;margin:0"><legend style="font-weight:600">রেটিং</legend><span class="lx-stars">
+        ${[5, 4, 3, 2, 1].map((n) => `<input type="radio" name="rv-rating" id="rv-r${n}" value="${n}"${n === rating ? ' checked' : ''}><label for="rv-r${n}" title="${bn(n)} তারা">★</label>`).join('')}</span></fieldset>
+      <div class="mb-field"><label for="rv-body">আপনার অভিজ্ঞতা</label><textarea id="rv-body" rows="4" required minlength="10" maxlength="1200">${esc(old?.body || '')}</textarea></div>
+      <button class="mb-btn mb-btn--sm" type="submit">${old ? 'হালনাগাদ করুন' : 'মতামত পাঠান'}</button></form>`;
+  if (location.hash === '#review') box.scrollIntoView();
+  $('#rv-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { data, error: err } = await sb.rpc('lms_submit_testimonial', {
+      p_name: $('#rv-name').value, p_body: $('#rv-body').value, p_course: $('#rv-course').value,
+      p_rating: Number($('input[name="rv-rating"]:checked')?.value || 5),
+    });
+    if (err) return toast(trErr(err), 'err');
+    if (data !== 'ok') return toast(data === 'short' ? 'আরেকটু বিস্তারিত লিখুন।' : 'মতামত দিতে কোর্সে ভর্তি থাকতে হবে।', 'err');
+    toast('ধন্যবাদ! শিক্ষক দেখে নেওয়ার পর সাইটে দেখাবে।'); reviewBox(p, active);
+  });
 }
 
 render();

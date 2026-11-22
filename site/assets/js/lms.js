@@ -82,11 +82,31 @@ export async function getProfile() {
 
 // হেডারে প্রবেশ/অ্যাকাউন্ট বোতাম
 export async function paintHeader() {
+  paintFooter();
   const slot = $('[data-auth-slot]'); if (!slot) return;
   const p = await getProfile();
-  if (!p) { slot.innerHTML = '<a class="mb-btn mb-btn--outline" href="/learn">প্রবেশ</a>'; return; }
+  if (!p) { slot.innerHTML = '<a class="mb-btn mb-btn--sm" href="/learn">শিক্ষার্থী প্রবেশ</a>'; return; }
   slot.innerHTML = (p.is_admin ? '<a class="mb-nav__login" href="/admin">ড্যাশবোর্ড</a>' : '') +
-    '<a class="mb-btn mb-btn--outline" href="/learn">আমার কোর্স</a>';
+    '<a class="mb-btn mb-btn--sm" href="/learn">আমার কোর্স</a>';
+}
+
+// WhatsApp লিংক (বার্তাসহ)
+export const waLink = (text = '') => S.whatsapp ? 'https://wa.me/' + S.whatsapp + (text ? '?text=' + encodeURIComponent(text) : '') : '';
+
+// ফুটারের যোগাযোগ লাইন ও ভাসমান WhatsApp বোতাম
+function paintFooter() {
+  $$('[data-year]').forEach((el) => (el.textContent = bn(new Date().getFullYear())));
+  const line = $('[data-contact-line]');
+  if (line) {
+    const parts = [];
+    if (S.whatsapp) parts.push(`<a href="${waLink()}" target="_blank" rel="noopener">WhatsApp: +${bn(S.whatsapp)}</a>`);
+    if (S.email) parts.push(`<a href="mailto:${esc(S.email)}">${esc(S.email)}</a>`);
+    line.innerHTML = parts.join(' · ');
+  }
+  const fl = $('[data-wa-float]');
+  if (fl && S.whatsapp && !/^\/(admin|lesson)/.test(location.pathname)) {
+    fl.href = waLink('আসসালামু আলাইকুম। আল-লিসানুল মুবীন সম্পর্কে জানতে চাই।'); fl.target = '_blank'; fl.rel = 'noopener'; fl.hidden = false;
+  }
 }
 
 // সুরক্ষিত ফাইলের ক্ষণস্থায়ী লিংক

@@ -97,7 +97,7 @@ details.lx-adv > summary { cursor: pointer; color: var(--mb-accent); font-weight
 
 /* দরস প্লেয়ার */
 .lx-player { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 32px; align-items: start; }
-.lx-player__side { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; background: var(--mb-paper); border: 1px solid var(--mb-rule); padding: 8px 14px 14px; }
+.lx-player__side { position: sticky; top: 80px; max-height: calc(100vh - 96px); overflow: auto; background: var(--mb-paper); border: 1px solid var(--mb-rule); padding: 8px 14px 14px; }
 .lx-player__side .lx-outline__ch { font-size: 16px; padding-top: 14px; }
 .lx-player__side .lx-outline__ls a, .lx-player__side .lx-outline__ls > span { font-size: 15px; padding: 9px 4px; }
 @media (max-width: 960px) { .lx-player { grid-template-columns: 1fr; } .lx-player__side { position: static; max-height: none; } }
@@ -150,7 +150,7 @@ details.lx-adv > summary { cursor: pointer; color: var(--mb-accent); font-weight
 /* অ্যাডমিন */
 .lx-admin { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; align-items: start; }
 @media (max-width: 860px) { .lx-admin { grid-template-columns: 1fr; } }
-.lx-admin__nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 16px; }
+.lx-admin__nav { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 80px; }
 @media (max-width: 860px) { .lx-admin__nav { position: static; flex-direction: row; flex-wrap: wrap; } }
 .lx-admin__nav button {
 	text-align: start; background: none; border: 0; border-inline-start: 3px solid transparent; padding: 11px 14px; font: inherit;
@@ -197,3 +197,16 @@ table.lx-table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .lx-toast.is-err { background: #7A1F2B; }
 dialog.lx-dialog { border: 1px solid var(--mb-rule); background: var(--mb-paper); padding: 24px; max-width: 520px; width: 92vw; }
 dialog.lx-dialog::backdrop { background: rgba(43, 29, 22, .45); }
+
+/* ড্যাশবোর্ড: শিক্ষক ও মতামত */
+.lx-tphoto { width: 112px; height: 112px; border-radius: 50%; overflow: hidden; flex: none; background: var(--mb-band); border: 1px solid var(--mb-rule); display: flex; align-items: center; justify-content: center; color: var(--mb-muted); font-size: 13px; }
+.lx-tphoto img { width: 100%; height: 100%; object-fit: cover; }
+.lx-card textarea { font: inherit; font-size: 16px; border: 1px solid var(--mb-rule); background: #FFFDF8; padding: 10px 12px; border-radius: 2px; width: 100%; }
+.lx-review .mb-stars { margin: 0; }
+
+/* শিক্ষার্থীর মতামত ফর্ম */
+.lx-stars { display: inline-flex; flex-direction: row-reverse; gap: 2px; }
+.lx-stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.lx-stars label { font-size: 28px; color: var(--mb-rule-soft); cursor: pointer; line-height: 1; }
+.lx-stars input:checked ~ label, .lx-stars label:hover, .lx-stars label:hover ~ label { color: #C08A1E; }
+.lx-stars input:focus-visible + label { outline: 2px solid var(--mb-accent); }

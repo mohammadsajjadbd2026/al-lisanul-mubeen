@@ -14,8 +14,8 @@ HEAD = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — আল-লিসানুল মুবীন</title>
-{robots}<meta name="theme-color" content="#7A1F2B">
+<title>{title}</title>
+{robots}{desc}<meta name="theme-color" content="#7A1F2B">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
@@ -40,11 +40,13 @@ HEAD = """<!doctype html>
 		</button>
 		<nav id="mb-nav" class="mb-nav" aria-label="প্রধান মেনু">
 			<ul class="mb-menu">
-				<li><a href="/#courses">কোর্স</a></li>
-				<li><a href="/#payment">ভর্তি</a></li>
-				<li><a href="/verify">সার্টিফিকেট যাচাই</a></li>
+				<li><a href="/courses">কোর্সসমূহ</a></li>
+				<li><a href="/about">আমাদের সম্পর্কে</a></li>
+				<li><a href="/#teachers">শিক্ষকমণ্ডলী</a></li>
+				<li><a href="/#payment">ভর্তির নিয়ম</a></li>
+				<li><a href="/contact">যোগাযোগ</a></li>
 			</ul>
-			<span class="lx-auth" data-auth-slot><a class="mb-btn mb-btn--outline" href="/learn">প্রবেশ</a></span>
+			<span class="lx-auth" data-auth-slot><a class="mb-btn mb-btn--sm" href="/learn">শিক্ষার্থী প্রবেশ</a></span>
 		</nav>
 	</div>
 </header>
@@ -53,15 +55,37 @@ HEAD = """<!doctype html>
 
 FOOT = """</main>
 <footer class="mb-footer">
-	<div class="mb-container mb-footer__inner">
-		<span>© <span data-year>২০২৬</span> আল-লিসানুল মুবীন</span>
-		<ul class="mb-footer__menu">
-			<li><a href="/#courses">কোর্স</a></li>
-			<li><a href="/learn">আমার কোর্স</a></li>
+	<div class="mb-container mb-footer__grid">
+		<div class="mb-footer__about">
+			<a class="mb-brand" href="/"><img class="mb-brand__img" src="/assets/img/logo.svg" alt="" width="132" height="46"><span class="mb-brand__name">আল-লিসানুল মুবীন</span></a>
+			<p>বাংলাভাষী শিক্ষার্থীদের জন্য কুরআন-সুন্নাহর ভাষা আরবি শেখার অনলাইন পাঠশালা — বাংলায় ব্যাখ্যা, ধাপে ধাপে অনুশীলন।</p>
+			<p class="mb-footer__ayah" lang="ar" dir="rtl">إِنَّا أَنزَلْنَاهُ قُرْآنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ</p>
+		</div>
+		<nav aria-label="কোর্স"><h2>কোর্স</h2><ul>
+			<li><a href="/courses">সকল কোর্স</a></li>
+			<li><a href="/course?c=arabi-bhashar-hatekhori">আরবি ভাষার হাতেখড়ি</a></li>
+			<li><a href="/course?c=nahwer-sohoj-path">নাহুর সহজ পাঠ</a></li>
+			<li><a href="/course?c=sarfer-sohoj-path">সরফের সহজ পাঠ</a></li>
+		</ul></nav>
+		<nav aria-label="প্রতিষ্ঠান"><h2>আল-লিসানুল মুবীন</h2><ul>
+			<li><a href="/about">আমাদের সম্পর্কে</a></li>
+			<li><a href="/#teachers">শিক্ষকমণ্ডলী</a></li>
+			<li><a href="/community">কমিউনিটি</a></li>
+			<li><a href="/contact">যোগাযোগ</a></li>
+		</ul></nav>
+		<nav aria-label="নীতিমালা"><h2>নীতিমালা ও সহায়তা</h2><ul>
+			<li><a href="/terms">শর্তাবলী ও নিয়মাবলী</a></li>
+			<li><a href="/refund">রিফান্ড পলিসি</a></li>
+			<li><a href="/#payment">ভর্তির নিয়ম</a></li>
 			<li><a href="/verify">সার্টিফিকেট যাচাই</a></li>
-		</ul>
+		</ul></nav>
 	</div>
+	<div class="mb-footer__bar"><div class="mb-container mb-footer__inner">
+		<span>© <span data-year>২০২৬</span> আল-লিসানুল মুবীন · সর্বস্বত্ব সংরক্ষিত</span>
+		<span data-contact-line></span>
+	</div></div>
 </footer>
+<a class="mb-wa-float" data-wa-float href="/contact" hidden aria-label="WhatsApp-এ যোগাযোগ"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4a.4.4 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.5-.3z"/></svg></a>
 <script src="/assets/js/config.js"></script>
 <script type="module" src="{script}"></script>
 </body>
@@ -76,6 +100,12 @@ for src in sorted(SRC.glob("*.html")):
         for k, v in (part.split(":", 1) for part in re.sub(r"^<!--|-->$", "", first.strip()).split("|"))
     )
     robots = '<meta name="robots" content="noindex">\n' if meta.get("robots") == "noindex" else ""
-    html = HEAD.format(title=meta["title"], robots=robots, body=meta.get("body", "")) + body + FOOT.format(script=meta["script"])
+    title = meta["title"] if meta.get("fulltitle") == "yes" else meta["title"] + " — আল-লিসানুল মুবীন"
+    desc = ""
+    if meta.get("desc"):
+        d = meta["desc"].replace('"', "&quot;")
+        desc = (f'<meta name="description" content="{d}">\n<meta property="og:title" content="{title}">\n'
+                f'<meta property="og:description" content="{d}">\n<meta property="og:image" content="/assets/img/icon-512.png">\n')
+    html = HEAD.format(title=title, robots=robots, desc=desc, body=meta.get("body", "")) + body + FOOT.format(script=meta["script"])
     (OUT / src.name).write_text(html, encoding="utf-8")
     print("built", src.name)
