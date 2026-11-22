@@ -26,8 +26,10 @@ const BRIDGE = `(function(){
 function frameDoc(lesson) {
   // @import (ফন্ট) নিয়মগুলো CSS-এর একদম শুরুতে থাকতে হয়
   const theme = lesson.course.theme_css || '';
-  const imports = (theme.match(/@import[^;]+;/g) || []).join('\n');
-  const css = (imports + '\n' + FRAME_BASE + '\n' + theme.replace(/@import[^;]+;/g, '')).replace(/<\/style/gi, '<\\/style');
+  // url(...)-এর ভেতরেও ';' থাকতে পারে (যেমন ital@0;1), তাই বন্ধনী পর্যন্ত মিলিয়ে নেওয়া
+  const IMPORT = /@import\s+url\([^)]*\)[^;]*;/g;
+  const imports = (theme.match(IMPORT) || []).join('\n');
+  const css = (imports + '\n' + FRAME_BASE + '\n' + theme.replace(IMPORT, '')).replace(/<\/style/gi, '<\\/style');
   const js = (lesson.course.theme_js || '').replace(/<\/script/gi, '<\\/script');
   return `<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <base target="_blank">
