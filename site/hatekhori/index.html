@@ -2,38 +2,10 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>আরবি ভাষার হাতেখড়ি</title>
-<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&family=Noto+Serif+Bengali:wght@700&display=swap" rel="stylesheet">
-<style>
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fbf6ec;font-family:'Hind Siliguri',sans-serif;color:#2b2220;padding:20px}
-.box{max-width:440px;background:#fff;border:1px solid #ead9b8;border-radius:18px;padding:30px;text-align:center;line-height:1.7}
-h1{font-family:'Noto Serif Bengali',serif;color:#7a1f2b;font-size:24px;margin:0 0 8px}
-a.btn{display:inline-block;margin-top:10px;background:#7a1f2b;color:#fff;text-decoration:none;padding:10px 22px;border-radius:999px}
-</style>
+<meta name="robots" content="noindex">
+<title>আরবি ভাষার হাতেখড়ি — আল-লিসানুল মুবীন</title>
+<meta http-equiv="refresh" content="0; url=/course?c=arabi-bhashar-hatekhori">
+<script>location.replace('/course?c=arabi-bhashar-hatekhori');</script>
 </head>
-<body>
-<div class="box" id="box"><h1>আরবি ভাষার হাতেখড়ি</h1><p id="t">যাচাই করা হচ্ছে…</p><div id="a"></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/assets/js/config.js"></script>
-<script src="/assets/js/auth.js"></script>
-<script>
-(async function(){
-  function show(text,href,label){document.getElementById('t').textContent=text;var a=document.getElementById('a');a.textContent='';
-    if(href){var l=document.createElement('a');l.className='btn';l.href=href;l.textContent=label;a.appendChild(l)}}
-  if(!MB.sb){show('সংযোগ ত্রুটি। পাতাটি রিফ্রেশ করুন।');return}
-  var s=await MB.session();
-  if(!s){show('এই কোর্সটি শুধু অনুমোদিত শিক্ষার্থীদের জন্য। আগে প্রবেশ করুন।','/account?next=/hatekhori','প্রবেশ / নিবন্ধন');return}
-  try{
-    var r=await fetch('/api/course?c=hatekhori',{headers:{Authorization:'Bearer '+s.access_token}});
-    if(r.status===403){show('এই কোর্সে আপনার ভর্তি এখনো অনুমোদিত হয়নি। আবেদন জমা দিয়ে থাকলে শিক্ষকের অনুমোদনের অপেক্ষা করুন।','/account?course=hatekhori','আমার অ্যাকাউন্ট / আবেদন');return}
-    if(r.status===401){show('সেশন শেষ হয়েছে। আবার প্রবেশ করুন।','/account?next=/hatekhori','প্রবেশ');return}
-    if(!r.ok)throw new Error(r.status);
-    var html=await r.text(); document.open(); document.write(html); document.close();
-  }catch(e){show('কোর্স আনা গেল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।','/hatekhori','আবার চেষ্টা')}
-})();
-</script>
-</body>
+<body><p>কোর্সটি নতুন ঠিকানায় চলে গেছে: <a href="/course?c=arabi-bhashar-hatekhori">আরবি ভাষার হাতেখড়ি</a></p></body>
 </html>

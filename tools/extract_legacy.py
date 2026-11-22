@@ -99,7 +99,7 @@ window.__lxDone=function(){
 
 # ======================= নাহু =======================
 def nahw():
-    doc = (ROOT / "site" / "nahw" / "index.html").read_text(encoding="utf-8")
+    doc = (ROOT / "courses" / "nahw" / "app.html").read_text(encoding="utf-8")
     css = max(re.findall(r"<style[^>]*>(.*?)</style>", doc, re.S), key=len)
     big = max(re.findall(r"<script>(.*?)</script>", doc, re.S), key=len)
     nav = re.search(r'<nav id="side"[^>]*>(.*?)</nav>', doc, re.S).group(1)
