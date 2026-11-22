@@ -464,3 +464,4 @@ a.mb-ccard:hover { border-color: var(--mb-accent); color: var(--mb-ink); transfo
 }
 .mb-steps { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 760px) { .mb-steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 440px) { .mb-header .mb-brand__name { display: none; } .mb-footer__bar .mb-footer__inner { padding-bottom: 84px; } }
