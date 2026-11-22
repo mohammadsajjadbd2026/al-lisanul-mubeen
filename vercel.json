@@ -4,13 +4,75 @@
   "buildCommand": "",
   "cleanUrls": true,
   "functions": {
-    "api/nahw/lesson.js": { "includeFiles": "courses/nahw/{lessons/**,config.json}" },
-    "api/course.js": { "includeFiles": "courses/{hatekhori/content.html,nahw/config.json}" },
-    "api/admin/legacy.js": { "includeFiles": "courses/{legacy/*.json,nahw/config.json}" }
+    "api/nahw/lesson.js": {
+      "includeFiles": "courses/nahw/{lessons/**,config.json}"
+    },
+    "api/course.js": {
+      "includeFiles": "courses/{hatekhori/content.html,nahw/config.json}"
+    },
+    "api/admin/legacy.js": {
+      "includeFiles": "courses/{legacy/*.json,nahw/config.json}"
+    }
   },
   "headers": [
-    { "source": "/hatekhori", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/nahw/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/(admin|admin-old|account|learn|lesson|certificate)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+    {
+      "source": "/hatekhori",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/nahw/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(admin|admin-old|account|learn|lesson|certificate)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/hatekhori",
+      "destination": "/course?c=arabi-bhashar-hatekhori",
+      "permanent": false
+    },
+    {
+      "source": "/hatekhori/:path*",
+      "destination": "/course?c=arabi-bhashar-hatekhori",
+      "permanent": false
+    },
+    {
+      "source": "/nahw",
+      "destination": "/course?c=nahwer-sohoj-path",
+      "permanent": false
+    },
+    {
+      "source": "/nahw/:path*",
+      "destination": "/course?c=nahwer-sohoj-path",
+      "permanent": false
+    },
+    {
+      "source": "/account",
+      "destination": "/learn",
+      "permanent": false
+    },
+    {
+      "source": "/admin-old",
+      "destination": "/admin",
+      "permanent": false
+    }
   ]
 }
